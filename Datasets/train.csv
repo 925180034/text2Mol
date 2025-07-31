@@ -1,0 +1,6 @@
+text,scaffold_smiles,SMILES
+"Synthesize a molecule with benzene ring that is an analgesic","c1ccccc1","CC(=O)Nc1ccccc1"
+"Design a drug-like molecule with aromatic scaffold","c1ccccc1","CCc1ccccc1N"
+"Create a molecule with pyridine core for CNS activity","c1ccncc1","Nc1ccncc1C"
+"Generate benzene derivative with anti-inflammatory properties","c1ccccc1","COc1ccc(CC(=O)O)cc1"
+"Design a heterocyclic compound for antibacterial activity","c1cccnc1","Cc1cncc(C)c1N"

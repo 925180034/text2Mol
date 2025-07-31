@@ -1,0 +1,182 @@
+# Training-specific configuration for Scaffold-based Molecular Generation
+
+# Inherit from default config
+base_config: "default_config.yaml"
+
+# Training-specific overrides
+training:
+  # Extended training parameters
+  num_epochs: 200
+  batch_size: 16  # Smaller batch size for memory efficiency
+  eval_batch_size: 32
+  gradient_accumulation_steps: 4  # Effective batch size = 16 * 4 = 64
+  
+  # Aggressive optimization for training
+  optimizer:
+    type: "adamw"
+    learning_rate: 3e-5  # Lower learning rate for stable training
+    weight_decay: 0.02
+    
+    # Fine-tuned learning rates for components
+    lr_multipliers:
+      molt5: 0.05   # Very low LR for pre-trained MolT5
+      encoders: 0.8
+      fusion: 1.0
+      decoders: 1.2
+      adapters: 3.0   # Higher LR for new components
+  
+  # Advanced scheduler with warmup
+  scheduler:
+    type: "cosine"
+    warmup_steps: 2000
+    num_cycles: 0.5
+  
+  # Training stability
+  gradient_clip_norm: 0.5
+  
+  # More frequent evaluation during training
+  eval_steps: 500
+  save_steps: 2000
+  logging_steps: 50
+  
+  # Early stopping
+  early_stopping:
+    enabled: true
+    patience: 10
+    min_delta: 0.001
+    monitor: "validation_loss"
+
+# Enhanced data configuration for training
+data:
+  # Data augmentation for training
+  augmentation:
+    enabled: true
+    smiles_enumeration: true
+    text_augmentation: true
+    augmentation_factor: 3
+    scaffold_hopping: false  # Experimental
+  
+  # Balanced sampling
+  balanced_sampling: true
+  min_samples_per_scaffold: 5
+  
+  # Multi-modal training
+  use_all_modalities: false
+  modality_dropout: 0.1  # Randomly drop modalities during training
+
+# Training-specific loss configuration
+loss:
+  type: "combined"
+  
+  # Loss components
+  use_scaffold_loss: true
+  use_multimodal_loss: false
+  use_contrastive_loss: false
+  use_quality_loss: false
+  
+  # Loss weights
+  loss_weights:
+    scaffold: 1.0
+    multimodal: 0.0
+    contrastive: 0.0
+    quality: 0.0
+  
+  # Scaffold loss configuration
+  scaffold_loss:
+    generation_weight: 1.0
+    scaffold_preservation_weight: 0.8  # High weight for scaffold preservation
+    validity_weight: 0.5
+    preservation_method: "soft"
+
+# Progressive training strategy
+progressive_training:
+  enabled: false
+  stages:
+    - name: "text_to_smiles"
+      epochs: 50
+      input_modalities: ["text"]
+      loss_weights: {"generation": 1.0}
+    
+    - name: "scaffold_conditioning"
+      epochs: 100
+      input_modalities: ["text", "smiles"]
+      loss_weights: {"generation": 1.0, "scaffold": 0.5}
+    
+    - name: "full_training"
+      epochs: 50
+      input_modalities: ["text", "smiles"]
+      loss_weights: {"generation": 1.0, "scaffold": 1.0}
+
+# Regularization for training
+regularization:
+  # Dropout rates
+  encoder_dropout: 0.15
+  fusion_dropout: 0.1
+  decoder_dropout: 0.1
+  
+  # Label smoothing
+  label_smoothing: 0.1
+  
+  # Gradient noise
+  gradient_noise: 0.01
+
+# Infrastructure optimizations for training
+infrastructure:
+  # Memory optimization
+  gradient_checkpointing: true
+  mixed_precision: true
+  cpu_offload: false
+  
+  # Data loading optimization
+  num_workers: 8
+  prefetch_factor: 4
+  pin_memory: true
+  persistent_workers: true
+  
+  # Distributed training settings
+  distributed: false
+  find_unused_parameters: false
+
+# Enhanced logging for training
+logging:
+  level: "DEBUG"
+  log_to_file: true
+  log_file: "logs/training_detailed.log"
+  
+  # More detailed tracking
+  use_tensorboard: true
+  use_wandb: true
+  wandb_project: "scaffold-mol-generation-training"
+  
+  # Log histograms and gradients
+  log_gradients: true
+  log_parameters: true
+  log_frequency: 100
+
+# Training checkpointing
+checkpointing:
+  # Checkpoint strategy
+  save_strategy: "steps"
+  save_steps: 2000
+  save_total_limit: 5
+  
+  # Resume training
+  resume_from_checkpoint: null
+  auto_resume: true
+  
+  # Model versioning
+  save_model_name: "scaffold_mol_generator"
+  model_version: "v1.0"
+
+# Validation during training
+validation:
+  # Validation frequency
+  evaluation_strategy: "steps"
+  eval_steps: 500
+  
+  # Validation metrics
+  metric_for_best_model: "scaffold_preservation_rate"
+  greater_is_better: true
+  
+  # Early stopping based on validation
+  load_best_model_at_end: true

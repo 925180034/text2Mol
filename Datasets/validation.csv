@@ -1,0 +1,3 @@
+text,scaffold_smiles,SMILES
+"Create a phenol derivative with antimicrobial properties","c1ccccc1O","Cc1cc(C)c(O)c(C)c1"
+"Design a molecule with imidazole ring for antifungal activity","c1c[nH]cn1","Cn1ccnc1C(=O)O"

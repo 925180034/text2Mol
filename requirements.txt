@@ -1,0 +1,86 @@
+# Core dependencies for Scaffold-based Molecular Generation
+# Python 3.10+ required
+
+# Deep Learning Framework
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+torch-geometric>=2.3.0
+torch-scatter>=2.1.0
+torch-sparse>=0.6.0
+
+# Transformers and NLP
+transformers>=4.30.0
+tokenizers>=0.13.0
+datasets>=2.12.0
+accelerate>=0.20.0
+
+# Molecular Processing
+rdkit>=2023.3.1
+rdkit-pypi>=2022.9.5  # Alternative if conda rdkit not available
+
+# Scientific Computing
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+scikit-learn>=1.2.0
+
+# Computer Vision
+pillow>=9.5.0
+opencv-python>=4.7.0
+timm>=0.9.0  # For Swin Transformer
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.14.0
+
+# Graph Processing
+networkx>=3.1.0
+dgl>=1.1.0  # Optional: Deep Graph Library
+
+# Chemistry and Cheminformatics
+py3Dmol>=2.0.0  # 3D molecular visualization (optional)
+mordred>=1.2.0  # Molecular descriptors (optional)
+
+# Machine Learning Utilities
+optuna>=3.2.0  # Hyperparameter optimization (optional)
+wandb>=0.15.0  # Experiment tracking (optional)
+tensorboard>=2.13.0  # Logging
+
+# File Processing
+pyyaml>=6.0
+h5py>=3.8.0
+jsonlines>=3.1.0
+
+# Progress and Utilities
+tqdm>=4.65.0
+colorama>=0.4.6
+click>=8.1.0
+
+# Statistical Analysis
+statsmodels>=0.14.0
+pingouin>=0.5.3  # Statistical tests (optional)
+
+# Natural Language Processing
+nltk>=3.8.0
+spacy>=3.5.0  # Optional: for advanced text processing
+sentence-transformers>=2.2.0  # Optional: for text embeddings
+
+# Jupyter and Development (optional)
+jupyter>=1.0.0
+ipywidgets>=8.0.0
+notebook>=6.5.0
+
+# Testing (optional)
+pytest>=7.3.0
+pytest-cov>=4.1.0
+
+# Code Quality (optional)
+black>=23.3.0
+flake8>=6.0.0
+isort>=5.12.0
+
+# Memory optimization (optional)
+psutil>=5.9.0
+gpustat>=1.1.0
