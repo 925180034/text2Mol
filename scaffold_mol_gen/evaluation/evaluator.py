@@ -323,24 +323,94 @@ class ModelEvaluator:
                                      targets: List[str],
                                      scaffolds: List[str],
                                      texts: List[str]) -> Dict[str, Any]:
-        """Compute comprehensive evaluation metrics."""
-        # Basic generation metrics
-        results = evaluate_model_outputs(predictions, targets, scaffold_data=scaffolds)
+        """Compute comprehensive evaluation metrics with Phase 1 enhancements."""
+        logger.info("Computing comprehensive metrics with Phase 1 enhancements...")
         
-        # Benchmark metrics
-        if len(predictions) > 10:  # Only for reasonable sample sizes
-            benchmark_results = self.benchmark_metrics.evaluate_benchmark(
-                predictions, targets, targets, scaffolds  # Using targets as reference for now
-            )
-            results.update(benchmark_results)
+        # Use the enhanced GenerationMetrics for comprehensive evaluation
+        results = self.generation_metrics.compute_comprehensive_metrics(
+            generated_smiles=predictions,
+            target_smiles=targets,
+            reference_smiles=targets,  # Using targets as reference for basic similarity
+            scaffold_data=scaffolds
+        )
         
-        # Text-specific metrics if available
-        if texts and all(text for text in texts):
-            # This would require generated text descriptions
-            # For now, skip text metrics
-            pass
+        # Add benchmark metrics for larger sample sizes
+        if len(predictions) > 10:
+            try:
+                benchmark_results = self.benchmark_metrics.evaluate_benchmark(
+                    predictions, targets, targets, scaffolds
+                )
+                results.update(benchmark_results)
+            except Exception as e:
+                logger.warning(f"Benchmark metrics computation failed: {e}")
+        
+        # Add scaffold-specific analysis
+        if scaffolds and all(scaffold for scaffold in scaffolds):
+            scaffold_analysis = self._compute_scaffold_analysis(predictions, targets, scaffolds)
+            results.update(scaffold_analysis)
+        
+        # Add evaluation metadata
+        results['enhanced_evaluation'] = {
+            'phase1_metrics_included': True,
+            'total_samples': len(predictions),
+            'valid_predictions': sum(1 for p in predictions if self._is_valid_smiles(p)),
+            'valid_targets': sum(1 for t in targets if self._is_valid_smiles(t))
+        }
         
         return results
+    
+    def _compute_scaffold_analysis(self,
+                                 predictions: List[str],
+                                 targets: List[str],
+                                 scaffolds: List[str]) -> Dict[str, Any]:
+        """Compute detailed scaffold preservation analysis."""
+        try:
+            # Extract scaffolds from predictions
+            pred_scaffolds = []
+            for pred in predictions:
+                if self._is_valid_smiles(pred):
+                    pred_scaffold = self.scaffold_extractor.extract_scaffold(pred)
+                    pred_scaffolds.append(pred_scaffold or '')
+                else:
+                    pred_scaffolds.append('')
+            
+            # Compute scaffold preservation rates
+            exact_scaffold_matches = sum(
+                1 for pred_scaffold, target_scaffold in zip(pred_scaffolds, scaffolds)
+                if pred_scaffold and target_scaffold and pred_scaffold == target_scaffold
+            )
+            
+            valid_scaffold_pairs = sum(
+                1 for pred_scaffold, target_scaffold in zip(pred_scaffolds, scaffolds)
+                if pred_scaffold and target_scaffold
+            )
+            
+            scaffold_preservation_rate = (
+                exact_scaffold_matches / valid_scaffold_pairs
+                if valid_scaffold_pairs > 0 else 0.0
+            )
+            
+            return {
+                'scaffold_analysis': {
+                    'exact_scaffold_matches': exact_scaffold_matches,
+                    'valid_scaffold_pairs': valid_scaffold_pairs,
+                    'scaffold_preservation_rate': scaffold_preservation_rate,
+                    'scaffold_extraction_success_rate': sum(1 for s in pred_scaffolds if s) / len(pred_scaffolds)
+                }
+            }
+            
+        except Exception as e:
+            logger.warning(f"Scaffold analysis failed: {e}")
+            return {'scaffold_analysis': {'error': str(e)}}
+    
+    def _is_valid_smiles(self, smiles: str) -> bool:
+        """Check if SMILES string is valid."""
+        try:
+            from rdkit import Chem
+            mol = Chem.MolFromSmiles(smiles)
+            return mol is not None
+        except:
+            return False
     
     def _statistical_significance_testing(self,
                                         baseline_predictions: List[str],

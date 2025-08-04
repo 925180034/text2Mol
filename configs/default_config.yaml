@@ -9,7 +9,7 @@ model:
   dropout: 0.1
   
   # MolT5 Configuration
-  molt5_checkpoint: "models/MolT5-Small"
+  molt5_checkpoint: "models/MolT5-Large-Caption2SMILES"
   
   # Encoder Configuration
   encoders:
@@ -179,9 +179,9 @@ logging:
 
 # Output Configuration
 output:
-  # Directories
+  # Directories (large files saved to data disk via symlinks)
   output_dir: "outputs"
-  checkpoint_dir: "checkpoints"
+  checkpoint_dir: "/root/autodl-tmp/text2Mol-outputs"
   log_dir: "logs"
   results_dir: "results"
   

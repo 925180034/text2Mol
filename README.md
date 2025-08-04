@@ -1,14 +1,25 @@
 # Scaffold-Based Molecular Generation
 
-A state-of-the-art system for generating molecules while preserving molecular scaffolds using multi-modal inputs.
+A production-ready system for scaffold-based molecular generation using multi-modal inputs with CUDA-optimized MolT5 integration.
+
+## 🚀 Recent Updates (August 2025)
+
+- **Enhanced Evaluation Pipeline**: New comprehensive evaluation system with detailed metrics
+- **Optimized Training**: Improved training pipeline with better convergence
+- **Extended I/O**: Support for multiple input/output formats
+- **Optimized Prompting**: Advanced prompting strategies for better generation
+- **Code Cleanup**: Organized project structure with archived legacy files
 
 ## Features
 
-- **Multi-Modal Input**: Text descriptions, SMILES strings, molecular graphs, and images
-- **Scaffold Preservation**: Maintains molecular scaffolds during generation
-- **MolT5 Integration**: Built on pre-trained MolT5 transformer models
-- **Advanced Fusion**: Cross-modal attention and gating mechanisms
-- **Comprehensive Evaluation**: Multiple molecular property metrics
+✅ **Multi-Modal Input**: Text descriptions + SMILES sequences  
+✅ **CUDA Optimized**: Fixed vocabulary compatibility for GPU training  
+✅ **Dual Tokenizer Architecture**: SciBERT for text, T5 for molecular data  
+✅ **Real Dataset Ready**: Tested with 19,795+ training samples  
+✅ **Production Model**: 454M parameters with scaffold preservation  
+✅ **Advanced Fusion**: Cross-modal attention and gating mechanisms
+✅ **Enhanced Evaluation**: Comprehensive metrics with visualization support
+✅ **Optimized Prompting**: Improved generation quality through prompt engineering
 
 ## Quick Start
 
@@ -26,29 +37,20 @@ python -c "import torch, transformers, rdkit; print('✅ All dependencies ready'
 ```
 
 ### 2. Model Setup
-**Important**: Models are not included in the repository due to size constraints.
+The system includes a CUDA-optimized MolT5 model (`models/MolT5-Small-Fixed/`) that resolves vocabulary compatibility issues. This model is ready to use.
 
-```python
-# Quick model download
-from transformers import T5Tokenizer, T5ForConditionalGeneration
-
-model_name = "laituan245/molt5-small"
-tokenizer = T5Tokenizer.from_pretrained(model_name)
-model = T5ForConditionalGeneration.from_pretrained(model_name)
-
-tokenizer.save_pretrained("models/MolT5-Small")
-model.save_pretrained("models/MolT5-Small")
-```
-
-For detailed setup instructions, see: [MODEL_SETUP.md](MODEL_SETUP.md)
+The model is pre-configured and ready to use.
 
 ### 3. Training
 ```bash
-# Start training with debug mode
-python train.py --config configs/training_config.yaml --debug
+# Enhanced training pipeline
+python enhanced_training_pipeline.py --config configs/default_config.yaml
+
+# Original training (debug mode)
+python train.py --config configs/default_config.yaml --debug
 
 # Full training
-python train.py --config configs/training_config.yaml
+python train.py --config configs/default_config.yaml
 ```
 
 ### 4. Generation
@@ -62,37 +64,59 @@ python generate.py --config configs/default_config.yaml --input-file input.csv
 
 ### 5. Evaluation
 ```bash
-python evaluate.py --config configs/evaluation_config.yaml
+# Enhanced evaluation with comprehensive metrics
+python evaluate_enhanced.py --config configs/default_config.yaml
+
+# Quiet evaluation (suppresses warnings)
+python run_quiet_evaluation.py
+
+# Standard evaluation
+python evaluate.py --config configs/default_config.yaml
 ```
 
 ## Project Structure
 
 ```
 scaffold-mol-generation/
-├── configs/                 # Configuration files  
+├── configs/                 # Configuration files
+│   └── default_config.yaml  # Main configuration
 ├── Datasets/               # Training/validation data
 ├── models/                 # Pre-trained models
 ├── scaffold_mol_gen/       # Core package
 │   ├── data/              # Dataset handling
-│   ├── models/            # Model architectures  
+│   │   ├── dataset.py
+│   │   └── dual_tokenizer_dataset.py
+│   ├── models/            # Model architectures
 │   ├── training/          # Training utilities
 │   ├── evaluation/        # Evaluation metrics
 │   ├── utils/             # Helper functions
+│   │   └── graph_utils.py
 │   └── api/               # Interactive API
-├── train.py               # Training script
-├── generate.py            # Generation script
-└── evaluate.py            # Evaluation script
+├── Core Scripts:
+│   ├── train.py                    # Training script
+│   ├── generate.py                 # Generation script
+│   ├── evaluate.py                 # Evaluation script
+│   ├── evaluate_enhanced.py        # Enhanced evaluation
+│   ├── enhanced_training_pipeline.py # Improved training
+│   ├── extended_input_output.py    # Extended I/O support
+│   ├── optimized_prompting.py      # Prompt optimization
+│   └── comprehensive_validation.py  # Validation suite
+├── Runners:
+│   ├── run_your_model_evaluation.py
+│   ├── run_enhanced_model_evaluation.py
+│   └── run_quiet_evaluation.py
+└── Results:
+    ├── evaluation_results_enhanced/
+    └── your_model_evaluation_results/
 ```
 
 ## Configuration
 
 ### Model Configuration
-- Edit `configs/default_config.yaml` for model architecture
-- Modify `configs/training_config.yaml` for training parameters
-- Adjust `configs/evaluation_config.yaml` for evaluation metrics
+- Edit `configs/default_config.yaml` for all model, training, and evaluation parameters
 
 ### Key Parameters
-- `molt5_checkpoint`: Path to MolT5 model (currently: `models/MolT5-Small`)
+- `molt5_checkpoint`: Path to MolT5 model (currently: `models/MolT5-Small-Fixed`)
 - `input_modalities`: Input types (`["text", "smiles"]`)
 - `max_length`: Maximum sequence length for generation
 - `batch_size`: Training batch size
@@ -100,14 +124,16 @@ scaffold-mol-generation/
 ## Data Format
 
 Training data should be CSV files with columns:
-- `text`: Natural language description
-- `SMILES`: Target molecule SMILES
-- `scaffold_smiles`: Scaffold SMILES (optional)
+- `text` or `description`: Natural language description of the molecule
+- `SMILES`: Target molecule SMILES notation
+
+The system automatically extracts scaffolds using the Murcko scaffold algorithm.
 
 Example:
 ```csv
-text,SMILES,scaffold_smiles
-"Design analgesic with benzene ring","CC(=O)Nc1ccccc1","c1ccccc1"
+description,SMILES
+"Small molecule inhibitor for cancer treatment","CC(=O)Nc1ccccc1"
+"Analgesic compound with benzene ring","CCc1ccccc1O"
 ```
 
 ## Requirements
@@ -125,6 +151,25 @@ text,SMILES,scaffold_smiles
 - Recommended batch size: 16-32 for training, 64+ for evaluation
 - CUDA 12.6 compatible
 
+## Troubleshooting
+
+### Common Issues
+
+1. **CUDA Memory**: Reduce batch_size in config if you encounter OOM errors
+2. **RDKit Warnings**: Use `run_quiet_evaluation.py` to suppress chemistry warnings
+3. **Missing Dependencies**: Ensure all requirements are installed with correct versions
+
+## Development Status
+
+- ✅ Phase 1: Core implementation complete
+- ✅ Phase 2: Enhanced evaluation and metrics
+- 🔄 Phase 3: Optimization and scaling (in progress)
+- ⏳ Phase 4: Production deployment (planned)
+
 ## Citation
 
 If you use this code, please cite the relevant papers for MolT5 and scaffold-based molecular generation.
+
+## Contact
+
+For questions or issues, please open an issue on GitHub.

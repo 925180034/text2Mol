@@ -88,7 +88,15 @@ class ScaffoldMolDataset(Dataset):
             # Required columns
             required_cols = []
             if 'text' in self.input_modalities:
-                required_cols.append('text')
+                # Support both 'text' and 'description' columns
+                if 'text' in df.columns:
+                    required_cols.append('text')
+                elif 'description' in df.columns:
+                    required_cols.append('description')
+                    # Rename for internal consistency
+                    df['text'] = df['description']
+                else:
+                    required_cols.append('text')
             if 'smiles' in self.input_modalities or self.output_modality == 'smiles':
                 required_cols.append('SMILES')
             

@@ -16,13 +16,13 @@ import sys
 from pathlib import Path
 import yaml
 import torch
-from transformers import T5Tokenizer
+from transformers import T5Tokenizer, BertTokenizer
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent))
 
 from scaffold_mol_gen.models.core_model import ScaffoldBasedMolT5Generator
-from scaffold_mol_gen.data.dataset import ScaffoldMolDataset
+from scaffold_mol_gen.data.dual_tokenizer_dataset import DualTokenizerScaffoldMolDataset
 from scaffold_mol_gen.data.preprocessing import MolecularPreprocessor
 from scaffold_mol_gen.training.trainer import create_trainer
 from scaffold_mol_gen.utils.mol_utils import MolecularUtils
@@ -147,7 +147,7 @@ def setup_reproducibility(seed: int):
     
     logger.info(f"Set random seed to {seed}")
 
-def create_datasets(config: dict, tokenizer, debug: bool = False):
+def create_datasets(config: dict, text_tokenizer, smiles_tokenizer, debug: bool = False):
     """Create training and validation datasets."""
     data_config = config['data']
     
@@ -160,7 +160,8 @@ def create_datasets(config: dict, tokenizer, debug: bool = False):
     
     # Dataset parameters
     dataset_params = {
-        'tokenizer': tokenizer,
+        'text_tokenizer': text_tokenizer,
+        'smiles_tokenizer': smiles_tokenizer,
         'input_modalities': data_config['input_modalities'],
         'output_modality': data_config['output_modality'],
         'max_text_length': data_config['max_text_length'],
@@ -170,13 +171,13 @@ def create_datasets(config: dict, tokenizer, debug: bool = False):
         'filter_invalid': data_config['filter_invalid']
     }
     
-    # Create datasets
-    train_dataset = ScaffoldMolDataset(
+    # Create datasets using dual tokenizer approach
+    train_dataset = DualTokenizerScaffoldMolDataset(
         data_path=train_path,
         **dataset_params
     )
     
-    val_dataset = ScaffoldMolDataset(
+    val_dataset = DualTokenizerScaffoldMolDataset(
         data_path=val_path,
         **dataset_params
     )
@@ -267,13 +268,19 @@ def main():
     # Preprocess data if needed
     preprocess_data(config)
     
-    # Initialize tokenizer
+    # Initialize tokenizers
     molt5_checkpoint = config['model']['molt5_checkpoint']
-    logger.info(f"Loading tokenizer from: {molt5_checkpoint}")
-    tokenizer = T5Tokenizer.from_pretrained(molt5_checkpoint)
+    logger.info(f"Loading SMILES tokenizer from: {molt5_checkpoint}")
+    smiles_tokenizer = T5Tokenizer.from_pretrained(molt5_checkpoint)
+    
+    logger.info("Loading text tokenizer: SciBERT")
+    text_tokenizer = BertTokenizer.from_pretrained('allenai/scibert_scivocab_uncased')
+    
+    logger.info(f"Text tokenizer vocab size: {text_tokenizer.vocab_size}")
+    logger.info(f"SMILES tokenizer vocab size: {smiles_tokenizer.vocab_size}")
     
     # Create datasets
-    train_dataset, val_dataset = create_datasets(config, tokenizer, args.debug)
+    train_dataset, val_dataset = create_datasets(config, text_tokenizer, smiles_tokenizer, args.debug)
     
     # Print dataset statistics
     train_stats = train_dataset.get_statistics()
