@@ -1,0 +1,57 @@
+# 存储优化的训练配置
+# 减少检查点大小和保存频率
+
+training:
+  batch_size: 16               
+  learning_rate: 0.000003      
+  num_epochs: 12               
+  gradient_clip: 0.5           
+  warmup_epochs: 2             
+  patience: 5                  
+  checkpoint_dir: '/root/autodl-tmp/optimized_checkpoints/'
+  
+  # 存储优化设置
+  save_every: 6                # 只在第6和12轮保存
+  max_checkpoints: 2           # 最多保留2个检查点
+  save_weights_only: true      # 只保存模型权重，不保存优化器状态
+  
+  gradient_accumulation_steps: 1
+
+model:
+  freeze_molt5_encoder: true   
+  freeze_molt5_decoder_layers: 16  
+  use_simple_fusion: true      
+
+data:
+  train_path: 'Datasets/train.csv'
+  val_path: 'Datasets/validation.csv'
+  max_text_length: 256
+  max_smiles_length: 128
+  num_workers: 8               
+  
+  # 数据缓存优化
+  cache_data: false            # 不缓存到内存，节省空间
+
+# Performance optimizations
+infrastructure:
+  mixed_precision: false       
+  gradient_checkpointing: true 
+  compile_model: false         
+  
+  # DataLoader optimization
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 4
+  
+  # GPU optimization
+  cudnn_benchmark: true
+  allow_tf32: true
+
+# Logging
+logging:
+  level: 'INFO'
+  log_dir: 'logs/'
+  log_every: 50               
+
+# Reproducibility
+seed: 42

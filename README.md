@@ -2,11 +2,11 @@
 
 [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red.svg)](https://pytorch.org/)
-[![Progress](https://img.shields.io/badge/progress-80%25-green.svg)](PROJECT_STATUS.md)
+[![Progress](https://img.shields.io/badge/progress-70%25-green.svg)](PROJECT_STATUS.md)
 
 A state-of-the-art molecular generation system that creates complete molecules from molecular scaffolds and text descriptions, supporting 7 input-output modality combinations across SMILES, Graph, and Image formats.
 
-## 🚀 Recent Updates (December 2024)
+## 🚀 Recent Updates (August 2025)
 
 - **Multi-Modal Architecture Complete**: All 7 input-output combinations implemented
 - **Graph & Image Decoders**: Added molecular graph and image generation capabilities  
@@ -46,35 +46,23 @@ The model is pre-configured and ready to use.
 
 ### 3. Training
 ```bash
-# Enhanced training pipeline
-python enhanced_training_pipeline.py --config configs/default_config.yaml
+# Multi-modal training
+python train_multimodal.py --config configs/default_config.yaml
 
-# Original training (debug mode)
-python train.py --config configs/default_config.yaml --debug
-
-# Full training
-python train.py --config configs/default_config.yaml
+# Monitor training progress
+./monitor_training.sh training.log
 ```
 
-### 4. Generation
+### 4. Evaluation
 ```bash
-# Interactive generation
-python generate.py --model-checkpoint models/MolT5-Small --interactive
+# Basic evaluation
+python final_fixed_evaluation.py --num_samples 50
 
-# Batch generation
-python generate.py --config configs/default_config.yaml --input-file input.csv
-```
+# Multi-modal evaluation
+python demo_multimodal_evaluation.py --num_samples 30
 
-### 5. Evaluation
-```bash
-# Enhanced evaluation with comprehensive metrics
-python evaluate_enhanced.py --config configs/default_config.yaml
-
-# Quiet evaluation (suppresses warnings)
-python run_quiet_evaluation.py
-
-# Standard evaluation
-python evaluate.py --config configs/default_config.yaml
+# Run complete multi-modal evaluation
+python run_multimodal_evaluation.py
 ```
 
 ## 📊 Supported Input-Output Combinations
@@ -82,12 +70,12 @@ python evaluate.py --config configs/default_config.yaml
 | # | Scaffold Input | Text | Output | Status | Description |
 |---|---------------|------|--------|--------|-------------|
 | 1 | SMILES | ✓ | SMILES | ✅ Working | Text + scaffold string → molecule string |
-| 2 | Graph | ✓ | SMILES | ✅ Ready | Text + scaffold graph → molecule string |
-| 3 | Image | ✓ | SMILES | ✅ Ready | Text + scaffold image → molecule string |
-| 4 | SMILES | ✓ | Graph | ✅ Ready | Text + scaffold string → molecule graph |
-| 5 | SMILES | ✓ | Image | ✅ Ready | Text + scaffold string → molecule image |
-| 6 | Graph | ✓ | Graph | ✅ Ready | Text + scaffold graph → molecule graph |
-| 7 | Image | ✓ | Image | ✅ Ready | Text + scaffold image → molecule image |
+| 2 | Graph | ✓ | SMILES | ✅ Working | Text + scaffold graph → molecule string |
+| 3 | Image | ✓ | SMILES | ✅ Working | Text + scaffold image → molecule string |
+| 4 | SMILES | ✓ | Graph | 🔄 Planned | Text + scaffold string → molecule graph |
+| 5 | SMILES | ✓ | Image | 🔄 Planned | Text + scaffold string → molecule image |
+| 6 | Graph | ✓ | Graph | ❌ Not implemented | Text + scaffold graph → molecule graph |
+| 7 | Image | ✓ | Image | ❌ Not implemented | Text + scaffold image → molecule image |
 
 ## Project Structure
 
@@ -181,13 +169,15 @@ description,SMILES
 
 ## Development Status
 
-**Overall Progress: 80% Complete**
+**Overall Progress: 70% Complete**
 
 - ✅ **Phase 1**: Data processing & preprocessing (100%)
-- ✅ **Phase 2**: Multi-modal encoders & decoders (100%)
+- ✅ **Phase 2**: Multi-modal encoders (100%)
 - ✅ **Phase 3**: Architecture & fusion layers (100%)
-- 🔄 **Phase 4**: Training system (50%)
-- ⏳ **Phase 5**: Optimization & deployment (0%)
+- ✅ **Phase 4**: SMILES output modality (100%)
+- 🔄 **Phase 5**: Training system (50%)
+- ❌ **Phase 6**: Graph/Image decoders (0%)
+- ❌ **Phase 7**: Model training & optimization (0%)
 
 ## Citation
 

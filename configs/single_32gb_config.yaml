@@ -1,0 +1,279 @@
+# Single 32GB vGPU Optimized Configuration
+# Target: 1.5-3 hours training with 92%+ performance
+# Hardware: 1x 32GB vGPU
+
+# Model Configuration - Full size for best quality
+model:
+  type: "ScaffoldBasedMolT5Generator"
+  hidden_size: 768
+  num_attention_heads: 12    # Full attention heads
+  num_fusion_layers: 5        # More layers for better quality
+  dropout: 0.1
+  
+  # MolT5 model path
+  molt5_checkpoint: "/root/autodl-tmp/text2Mol-models/MolT5-Large-Caption2SMILES"
+  
+  # Full-size Encoders
+  encoders:
+    num_gin_layers: 3          # Full layers
+    gin_hidden_size: 256       # Full size
+    image_encoder_type: "swin_transformer"  # Best quality
+    use_flash_attention: true  # GPU supports Flash Attention
+    
+  # Advanced Fusion
+  fusion:
+    type: "advanced_modal_fusion"
+    cross_attention_layers: 4
+    gating_mechanism: true
+    use_flash_attention: true
+    
+  # Generation settings
+  generation:
+    max_length: 200           # Full length
+    num_beams: 5              # More beams for quality
+    temperature: 0.8
+    top_k: 50
+    top_p: 0.95
+    do_sample: true
+
+# Data Configuration - Larger batches with 32GB
+data:
+  # Dataset paths
+  train_data: "Datasets/train.csv"
+  val_data: "Datasets/validation.csv"
+  test_data: "Datasets/test.csv"
+  
+  # Full sequence lengths
+  max_text_length: 256       # Full length
+  max_smiles_length: 128     # Full length
+  image_size: [224, 224]     # Full resolution
+  scaffold_type: "murcko"
+  filter_invalid: true
+  
+  # Multi-modal settings
+  input_modalities: ["text", "smiles"]
+  output_modality: "smiles"
+  combination_type: 5
+  
+  # Data augmentation for better generalization
+  augmentation:
+    enabled: true
+    smiles_enumeration: true
+    text_augmentation: true
+    augmentation_factor: 2
+
+# Training Configuration - Optimized for 32GB single GPU
+training:
+  # Training duration for high quality
+  num_epochs: 25              # More epochs for better convergence
+  batch_size: 4               # Very small batch to avoid NaN
+  eval_batch_size: 8          # Reduced for evaluation
+  gradient_accumulation_steps: 1   # No accumulation to simplify
+  
+  # Optimizer settings
+  optimizer:
+    type: "adamw"
+    learning_rate: 0.000001   # Much lower to prevent NaN (1e-6)
+    weight_decay: 0.0001     # Reduced weight decay
+    eps: 0.00000001          # 1e-8
+    betas: [0.9, 0.98]       # Less aggressive momentum
+    
+    # Differential learning rates
+    lr_multipliers:
+      molt5: 0.01             # Very slow fine-tuning (1e-8)
+      encoders: 0.1           # Much reduced (1e-7)
+      fusion: 0.5             # Moderate (5e-7)
+      decoders: 0.5           # Moderate (5e-7)
+      adapters: 1.0           # Standard (1e-6)
+  
+  # Cosine scheduler with warmup
+  scheduler:
+    type: "cosine_with_restarts"
+    warmup_steps: 1000        # Much longer warmup to prevent NaN
+    T_0: 10                   # First restart after 10 epochs
+    T_mult: 2                 # Double period after each restart
+    eta_min: 0.000001         # Minimum learning rate
+    
+  # Regularization
+  gradient_clip_norm: 0.1    # Very aggressive clipping to prevent NaN
+  dropout: 0.1
+  label_smoothing: 0.0       # Disabled to prevent instability
+  weight_decay: 0.0001      # Much reduced
+  
+  # Evaluation settings
+  eval_steps: 100             # Frequent evaluation
+  save_steps: 500             # Save checkpoints
+  logging_steps: 10           # Detailed logging
+  eval_epochs: 1              # Evaluate every epoch
+  save_epochs: 5              # Save every 5 epochs
+  
+  # Multi-task learning for better representations
+  multi_task: true
+  task_weights:
+    smiles: 1.0
+    graph: 0.4                # Auxiliary task
+    image: 0.3                # Auxiliary task
+  active_tasks: ["smiles", "graph", "image"]
+
+# Loss Configuration - Comprehensive
+loss:
+  type: "scaffold"
+  generation_weight: 1.0
+  scaffold_preservation_weight: 0.5
+  validity_weight: 0.3
+  diversity_weight: 0.1
+  novelty_weight: 0.1
+  preservation_method: "soft"
+  
+  # Multi-modal loss
+  multimodal_loss:
+    task_weights:
+      smiles: 1.0
+      graph: 0.4
+      image: 0.3
+    alignment_weight: 0.2
+    contrastive_weight: 0.15
+
+# Evaluation - Comprehensive
+evaluation:
+  # All metrics during training
+  compute_validity: true
+  compute_uniqueness: true
+  compute_novelty: true
+  compute_diversity: true
+  compute_scaffold_preservation: true
+  compute_drug_likeness: true
+  compute_similarity: true
+  
+  # Evaluation settings
+  generation_samples: 20      # More samples for evaluation
+  similarity_threshold: 0.7
+  
+  # Final evaluation
+  final_evaluation:
+    compute_all_metrics: true
+    generation_samples: 100
+    save_all_outputs: true
+
+# Infrastructure - Single 32GB GPU optimization
+infrastructure:
+  # Device Configuration
+  device: "cuda:0"            # Use GPU 0
+  mixed_precision: false      # Disable FP16 to avoid NaN
+  mixed_precision_dtype: "float32"  # Use FP32
+  
+  # Single GPU Settings
+  distributed: false          # Single GPU
+  world_size: 1
+  
+  # DataLoader Optimization
+  num_workers: 8              # Optimal for single GPU
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 4
+  non_blocking: true          # Async GPU transfers
+  
+  # Memory Optimization
+  gradient_checkpointing: false  # Not needed with 32GB
+  cpu_offload: false            # Keep everything on GPU
+  empty_cache_freq: 200         # Clear cache periodically
+  
+  # Compilation and Optimization (PyTorch 2.0+)
+  compile_model: false  # Disabled due to compatibility issues
+  compile_mode: "max-autotune"  # Best performance
+  compile_backend: "inductor"   # Best for NVIDIA
+  
+  # GPU Specific Optimizations
+  use_flash_attention: true     # 2-3x attention speedup
+  use_fused_adam: true          # Fused optimizer
+  use_channels_last: true       # Memory format optimization
+  use_tensor_cores: true        # FP16 tensor cores
+  cudnn_benchmark: true         # Auto-tune convolutions
+  allow_tf32: true              # TF32 for matmul
+
+# Advanced Optimization Strategies
+optimization_strategies:
+  # Data Pipeline
+  cache_dataset: true          # Cache preprocessed data
+  use_multiprocessing: true
+  dynamic_batching: true       # Vary batch size by sequence length
+  bucket_sampling: true        # Group similar lengths
+  
+  # Model Optimization
+  use_flash_attention_2: true  # Latest Flash Attention
+  use_xformers: false          # Alternative to Flash Attention
+  gradient_accumulation_checkpoint: false
+  
+  # Training Optimization
+  use_automatic_mixed_precision: true
+  amp_opt_level: "O2"          # Aggressive mixed precision
+  
+  # Dynamic Loss Scaling
+  loss_scale: "dynamic"
+  loss_scale_window: 1000
+  min_loss_scale: 1
+  
+  # Early Stopping
+  early_stopping:
+    enabled: true
+    patience: 5
+    min_delta: 0.0001
+    monitor: "val_loss"
+    mode: "min"
+  
+  # Advanced Training
+  use_swa: true                # Stochastic Weight Averaging
+  swa_start: 15                # Start SWA after epoch 15
+  swa_lr: 0.00005             # SWA learning rate
+  
+  # Gradient Penalty
+  gradient_penalty: false
+  gradient_penalty_weight: 0.01
+
+# Logging - Balanced
+logging:
+  level: "INFO"
+  log_to_file: true
+  log_file: "logs/single_32gb_training.log"
+  
+  # Tracking
+  use_tensorboard: true
+  tensorboard_dir: "logs/tensorboard"
+  use_wandb: false             # Optional
+  
+  # Checkpointing
+  save_strategy: "best_and_last"
+  save_total_limit: 5          # Keep 5 best checkpoints
+  metric_for_best_model: "eval_loss"
+
+# Output Configuration
+output:
+  output_dir: "outputs/single_32gb"
+  checkpoint_dir: "/root/autodl-tmp/single_32gb_checkpoints"
+  
+  # Model saving
+  save_best_model: true
+  save_last_model: true
+  save_optimizer_state: true   # Can afford with 32GB
+  save_scheduler_state: true
+  
+  # Results
+  save_predictions: true
+  save_evaluation_results: true
+  save_training_args: true
+
+# Reproducibility
+reproducibility:
+  seed: 42
+  deterministic: false         # Disable for speed
+  benchmark: true              # Enable cuDNN autotuner
+
+# Performance Targets
+performance_targets:
+  training_time: "1.5-3 hours"
+  gpu_utilization: ">95%"
+  validity: ">92%"
+  scaffold_preservation: ">88%"
+  bleu_score: ">0.85"
+  memory_usage: "<28GB"
+  throughput: ">300 samples/sec"

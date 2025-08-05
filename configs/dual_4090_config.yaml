@@ -1,0 +1,270 @@
+# Dual RTX 4090 Optimized Configuration
+# Target: 1-2 hours training with 90%+ performance
+# Hardware: 2x RTX 4090 (24GB each) or 32GB vGPU
+
+# Model Configuration - Balanced for quality and speed
+model:
+  type: "ScaffoldBasedMolT5Generator"
+  hidden_size: 768
+  num_attention_heads: 12    # Full attention heads for quality
+  num_fusion_layers: 4        # Balanced fusion layers
+  dropout: 0.1
+  
+  # MolT5 model path
+  molt5_checkpoint: "/root/autodl-tmp/text2Mol-models/MolT5-Large-Caption2SMILES"
+  
+  # Optimized Encoders
+  encoders:
+    num_gin_layers: 3          # Full layers for quality
+    gin_hidden_size: 256       # Full size
+    image_encoder_type: "swin_transformer"  # Best quality
+    use_flash_attention: true  # RTX 4090 supports Flash Attention
+    
+  # Advanced Fusion
+  fusion:
+    type: "advanced_modal_fusion"
+    cross_attention_layers: 3
+    gating_mechanism: true
+    use_flash_attention: true
+    
+  # Generation settings
+  generation:
+    max_length: 150
+    num_beams: 4
+    temperature: 0.8
+    top_k: 40
+    top_p: 0.92
+    do_sample: true
+
+# Data Configuration - Maximize GPU utilization
+data:
+  # Dataset paths
+  train_data: "Datasets/train.csv"
+  val_data: "Datasets/validation.csv"
+  test_data: "Datasets/test.csv"
+  
+  # Balanced sequence lengths
+  max_text_length: 192       # Good balance
+  max_smiles_length: 96      # Good balance
+  image_size: [192, 192]     # Balanced size
+  scaffold_type: "murcko"
+  filter_invalid: true
+  
+  # Multi-modal settings
+  input_modalities: ["text", "smiles"]
+  output_modality: "smiles"
+  combination_type: 5
+  
+  # Data augmentation for better generalization
+  augmentation:
+    enabled: true
+    smiles_enumeration: true
+    text_augmentation: false   # Keep text consistent
+    augmentation_factor: 2
+
+# Training Configuration - Aggressive but stable
+training:
+  # Optimized for 1-2 hours on dual 4090
+  num_epochs: 20              # More epochs with larger batches
+  batch_size: 128             # Large batch per GPU (256 total)
+  eval_batch_size: 256        # Even larger for eval
+  gradient_accumulation_steps: 1  # No accumulation needed
+  
+  # Optimizer settings for fast convergence
+  optimizer:
+    type: "adamw"
+    learning_rate: 2e-4       # Higher LR for faster convergence
+    weight_decay: 0.01
+    eps: 1e-8
+    betas: [0.9, 0.999]
+    
+    # Differential learning rates
+    lr_multipliers:
+      molt5: 0.05             # Minimal fine-tuning
+      encoders: 0.2           # Some fine-tuning
+      fusion: 1.0             # Full training
+      decoders: 1.0           # Full training
+      adapters: 2.0           # Faster adaptation
+  
+  # OneCycle scheduler for fast convergence
+  scheduler:
+    type: "onecycle"          # Best for short training
+    max_lr: 3e-4              # Peak learning rate
+    pct_start: 0.1            # 10% warmup
+    anneal_strategy: "cos"    # Cosine annealing
+    
+  # Regularization
+  gradient_clip_norm: 1.0
+  dropout: 0.1
+  label_smoothing: 0.1       # Better generalization
+  
+  # Evaluation settings
+  eval_steps: 200             # Frequent evaluation
+  save_steps: 500             # Save best models
+  logging_steps: 20           # Detailed logging
+  eval_epochs: 1              # Evaluate every epoch
+  save_epochs: 5              # Save every 5 epochs
+  
+  # Multi-task for better representations
+  multi_task: true
+  task_weights:
+    smiles: 1.0
+    graph: 0.3                # Auxiliary task
+    image: 0.2                # Auxiliary task
+  active_tasks: ["smiles", "graph"]  # Focus on main tasks
+
+# Loss Configuration - Balanced
+loss:
+  type: "scaffold"
+  generation_weight: 1.0
+  scaffold_preservation_weight: 0.4
+  validity_weight: 0.3
+  diversity_weight: 0.1       # Encourage diversity
+  preservation_method: "soft"
+  
+  # Multi-modal loss
+  multimodal_loss:
+    task_weights:
+      smiles: 1.0
+      graph: 0.3
+      image: 0.2
+    alignment_weight: 0.2
+    contrastive_weight: 0.1  # Cross-modal alignment
+
+# Evaluation - Comprehensive but fast
+evaluation:
+  # Essential metrics only during training
+  compute_validity: true
+  compute_uniqueness: true
+  compute_novelty: false       # Skip during training
+  compute_diversity: true
+  compute_scaffold_preservation: true
+  compute_drug_likeness: false # Skip during training
+  
+  # Fast evaluation
+  generation_samples: 10
+  similarity_threshold: 0.7
+  
+  # Full evaluation at end
+  final_evaluation:
+    compute_all_metrics: true
+    generation_samples: 100
+
+# Infrastructure - Maximize dual 4090 performance
+infrastructure:
+  # Device Configuration
+  device: "cuda"
+  mixed_precision: true       # FP16 for speed
+  mixed_precision_dtype: "bfloat16"  # Better for 4090
+  
+  # Distributed Training Settings
+  distributed: true            # USE BOTH GPUs
+  world_size: 2               # 2 GPUs
+  backend: "nccl"             # NVIDIA collective communications
+  find_unused_parameters: false
+  gradient_as_bucket_view: true  # Memory optimization
+  
+  # DataLoader Optimization
+  num_workers: 12             # 6 per GPU
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 4
+  non_blocking: true          # Async GPU transfers
+  
+  # Memory Optimization
+  gradient_checkpointing: false  # Not needed with 24GB
+  cpu_offload: false            # Keep everything on GPU
+  empty_cache_freq: 100         # Clear cache periodically
+  
+  # Compilation and Optimization (PyTorch 2.0+)
+  compile_model: true
+  compile_mode: "max-autotune"  # Best performance for 4090
+  compile_backend: "inductor"   # Best for NVIDIA
+  
+  # RTX 4090 Specific Optimizations
+  use_flash_attention: true     # 2-3x attention speedup
+  use_fused_adam: true          # Fused optimizer
+  use_channels_last: true       # Memory format optimization
+  use_tensor_cores: true        # FP16 tensor cores
+  cudnn_benchmark: true         # Auto-tune convolutions
+  allow_tf32: true              # TF32 for matmul
+
+# Advanced Optimization Strategies
+optimization_strategies:
+  # Data Pipeline
+  cache_dataset: true          # Cache preprocessed data
+  use_multiprocessing: true
+  dynamic_batching: true       # Vary batch size by sequence length
+  bucket_sampling: true        # Group similar lengths
+  
+  # Model Optimization
+  use_flash_attention_2: true  # Latest Flash Attention
+  use_xformers: false          # Alternative to Flash Attention
+  use_deepspeed: false         # Not needed for 2 GPUs
+  use_fairscale: false         # Not needed
+  
+  # Training Optimization
+  use_automatic_mixed_precision: true
+  amp_opt_level: "O2"          # Aggressive mixed precision
+  
+  # Dynamic Loss Scaling
+  loss_scale: "dynamic"
+  loss_scale_window: 500
+  
+  # Early Stopping
+  early_stopping:
+    enabled: true
+    patience: 5                # More patience
+    min_delta: 0.0005
+    monitor: "val_loss"
+    mode: "min"
+  
+  # Learning Rate Finder (optional)
+  lr_finder:
+    enabled: false             # Set true to find optimal LR
+    num_iter: 100
+    start_lr: 1e-6
+    end_lr: 1e-2
+
+# Logging - Minimal overhead
+logging:
+  level: "INFO"
+  log_to_file: true
+  log_file: "logs/dual_4090_training.log"
+  
+  # Tracking
+  use_tensorboard: true        # Lightweight
+  use_wandb: false             # Optional
+  
+  # Checkpointing
+  save_strategy: "best"        # Only save best models
+  save_total_limit: 3          # Keep only 3 best checkpoints
+
+# Output Configuration
+output:
+  output_dir: "outputs/dual_4090"
+  checkpoint_dir: "/root/autodl-tmp/dual_4090_checkpoints"
+  
+  # Model saving
+  save_best_model: true
+  save_optimizer_state: false  # Save space
+  save_scheduler_state: false  # Save space
+  
+  # Results
+  save_predictions: true
+  save_evaluation_results: true
+
+# Reproducibility
+reproducibility:
+  seed: 42
+  deterministic: false         # Disable for speed
+  benchmark: true              # Enable cuDNN autotuner
+
+# Performance Targets
+performance_targets:
+  training_time: "1-2 hours"
+  gpu_utilization: ">95%"
+  validity: ">90%"
+  scaffold_preservation: ">85%"
+  memory_usage: "<20GB per GPU"
+  throughput: ">500 samples/sec"

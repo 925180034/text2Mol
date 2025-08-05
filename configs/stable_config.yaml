@@ -1,0 +1,35 @@
+# Stable Training Configuration
+# Designed to prevent NaN issues and achieve efficient training on 32GB GPU
+
+training:
+  batch_size: 2                # Very small for stability
+  learning_rate: 0.000001      # 1e-6, very conservative
+  num_epochs: 30               # Enough for convergence
+  gradient_clip: 0.1           # Aggressive clipping
+  warmup_epochs: 5             # Progressive warmup
+  patience: 10                 # Early stopping patience
+  checkpoint_dir: '/root/autodl-tmp/stable_checkpoints/'
+  save_every: 5                # Save every 5 epochs
+
+model:
+  freeze_molt5_encoder: true   # Freeze encoder for stability
+  freeze_molt5_decoder_layers: 20  # Freeze most decoder layers
+  use_simple_fusion: true      # Simple fusion to avoid complexity
+
+data:
+  train_path: 'Datasets/train.csv'
+  val_path: 'Datasets/validation.csv'
+  max_text_length: 256
+  max_smiles_length: 128
+  num_workers: 4               # Moderate parallelism
+
+# No mixed precision to avoid numerical issues
+mixed_precision: false
+
+# Logging
+logging:
+  level: 'INFO'
+  log_dir: 'logs/'
+
+# Reproducibility
+seed: 42

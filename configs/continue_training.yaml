@@ -1,0 +1,49 @@
+
+# 继续训练配置 - 只训练剩余的轮次
+training:
+  batch_size: 16               
+  learning_rate: 0.000001      # 使用较低的学习率继续
+  num_epochs: 8  # 只训练剩余轮次
+  gradient_clip: 0.5           
+  warmup_epochs: 0             # 不需要warmup
+  patience: 3                  
+  checkpoint_dir: '/root/autodl-tmp/continued_checkpoints/'
+  save_every: 8  # 最后保存一次
+  max_checkpoints: 2           
+  save_weights_only: true      
+  
+  # 继续训练设置
+  resume_from: '/root/autodl-tmp/safe_fast_checkpoints/best_model.pt'
+  start_epoch: 5
+  
+  gradient_accumulation_steps: 1
+
+model:
+  freeze_molt5_encoder: true   
+  freeze_molt5_decoder_layers: 16  
+  use_simple_fusion: true      
+
+data:
+  train_path: 'Datasets/train.csv'
+  val_path: 'Datasets/validation.csv'
+  max_text_length: 256
+  max_smiles_length: 128
+  num_workers: 8               
+  cache_data: false
+
+infrastructure:
+  mixed_precision: false       
+  gradient_checkpointing: true 
+  compile_model: false         
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 4
+  cudnn_benchmark: true
+  allow_tf32: true
+
+logging:
+  level: 'INFO'
+  log_dir: 'logs/'
+  log_every: 50               
+
+seed: 42

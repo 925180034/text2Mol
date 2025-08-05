@@ -1,0 +1,51 @@
+# Safe Fast Training Configuration
+# Optimized for speed without mixed precision issues on 32GB GPU
+
+training:
+  batch_size: 16               # Larger batch without mixed precision
+  learning_rate: 0.000003      # 3e-6, slightly higher for faster convergence
+  num_epochs: 12               # Fewer epochs with larger batches
+  gradient_clip: 0.5           # Moderate clipping
+  warmup_epochs: 2             # Quick warmup
+  patience: 5                  # Early stopping
+  checkpoint_dir: '/root/autodl-tmp/safe_fast_checkpoints/'
+  save_every: 3                # Save every 3 epochs
+  
+  # No gradient accumulation needed with larger batch
+  gradient_accumulation_steps: 1
+
+model:
+  freeze_molt5_encoder: true   # Keep frozen for stability
+  freeze_molt5_decoder_layers: 16  # Unfreeze 4 more layers for better learning
+  use_simple_fusion: true      # Keep simple fusion
+
+data:
+  train_path: 'Datasets/train.csv'
+  val_path: 'Datasets/validation.csv'
+  max_text_length: 256
+  max_smiles_length: 128
+  num_workers: 8               # Fast data loading
+
+# Performance optimizations (NO mixed precision)
+infrastructure:
+  mixed_precision: false       # Disabled to avoid issues
+  gradient_checkpointing: true # Can use this without mixed precision
+  compile_model: false         # Don't compile for compatibility
+  
+  # DataLoader optimization
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 4
+  
+  # GPU optimization
+  cudnn_benchmark: true
+  allow_tf32: true
+
+# Logging
+logging:
+  level: 'INFO'
+  log_dir: 'logs/'
+  log_every: 50               # Log less frequently
+
+# Reproducibility
+seed: 42

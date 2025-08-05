@@ -1,0 +1,14 @@
+{
+  "validity": 0.7777777777777778,
+  "uniqueness": 1.0,
+  "novelty": 0.75,
+  "bleu": 0.6753132835976766,
+  "exact_match": 0.19444444444444445,
+  "levenshtein": 0.6634651880429775,
+  "maccs_similarity": 0.855078969875661,
+  "morgan_similarity": 0.569207730944364,
+  "rdk_similarity": 0.7009624000686699,
+  "total_samples": 36,
+  "valid_samples": 28,
+  "success_rate": 0.7777777777777778
+}
