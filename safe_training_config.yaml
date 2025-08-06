@@ -1,0 +1,205 @@
+# 安全训练配置 - 严格控制磁盘空间使用
+# 只保留必要文件，避免空间不足
+
+# Model Configuration
+model:
+  type: "ScaffoldBasedMolT5Generator"
+  hidden_size: 768
+  num_attention_heads: 12
+  num_fusion_layers: 4
+  dropout: 0.1
+  
+  molt5_checkpoint: "/root/autodl-tmp/text2Mol-models/MolT5-Large-Caption2SMILES"
+  
+  encoders:
+    num_gin_layers: 3
+    gin_hidden_size: 256
+    image_encoder_type: "swin_transformer"
+    
+  fusion:
+    type: "advanced_modal_fusion"
+    cross_attention_layers: 3
+    gating_mechanism: true
+    
+  generation:
+    max_length: 128
+    num_beams: 3
+    temperature: 0.8
+    top_k: 50
+    top_p: 0.95
+    do_sample: true
+
+# Data Configuration
+data:
+  train_data: "Datasets/train.csv"
+  val_data: "Datasets/validation.csv"
+  test_data: "Datasets/test.csv"
+  
+  max_text_length: 200
+  max_smiles_length: 100
+  image_size: [224, 224]
+  scaffold_type: "murcko"
+  filter_invalid: true
+  
+  input_modalities: ["text", "smiles", "graph", "image"]
+  output_modality: "smiles"
+  
+  augmentation:
+    enabled: false
+
+# Training Configuration - 磁盘空间优化
+training:
+  num_epochs: 5
+  batch_size: 16       # SMILES模态
+  batch_size_graph: 8  # Graph模态  
+  batch_size_image: 4  # Image模态
+  eval_batch_size: 32
+  gradient_accumulation_steps: 2
+  
+  optimizer:
+    type: "adamw"
+    learning_rate: 1e-4
+    weight_decay: 0.01
+    eps: 1e-8
+    betas: [0.9, 0.999]
+    
+    lr_multipliers:
+      molt5: 0.2
+      encoders: 1.5
+      fusion: 1.5
+      decoders: 1.5
+      adapters: 2.0
+  
+  scheduler:
+    type: "cosine"
+    warmup_steps: 200
+    
+  gradient_clip_norm: 1.0
+  dropout: 0.05
+  
+  # 严格的评估和保存策略
+  eval_steps: 500
+  save_steps: 999999   # 几乎不保存中间checkpoint
+  logging_steps: 50
+  eval_epochs: 1
+  save_epochs: 999     # 只在最后保存
+  
+  # 多任务学习
+  multi_task: true
+  task_weights:
+    smiles: 1.0
+    graph: 0.8
+    image: 0.6
+  active_tasks: ["smiles", "graph", "image"]
+
+# Loss Configuration
+loss:
+  type: "scaffold"
+  generation_weight: 1.0
+  scaffold_preservation_weight: 0.3
+  validity_weight: 0.5
+  preservation_method: "soft"
+  
+  multimodal_loss:
+    task_weights:
+      smiles: 1.0
+      graph: 0.8
+      image: 0.6
+    alignment_weight: 0.1
+
+# Evaluation Configuration
+evaluation:
+  compute_validity: true
+  compute_uniqueness: true
+  compute_novelty: true
+  compute_diversity: false
+  compute_scaffold_preservation: true
+  compute_drug_likeness: false
+  
+  generation_samples: 3
+  similarity_threshold: 0.7
+
+# Infrastructure Configuration
+infrastructure:
+  device: "cuda"
+  mixed_precision: true
+  compile_model: true
+  
+  distributed: false
+  world_size: 1
+  
+  num_workers: 4
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 2
+  
+  gradient_checkpointing: false
+  cpu_offload: false
+  max_memory_gb: 28
+
+# Logging Configuration - 最小化日志
+logging:
+  level: "INFO"
+  log_to_file: true
+  log_file: "logs/safe_training.log"
+  
+  use_tensorboard: false  # 禁用以节省空间
+  use_wandb: false
+  save_plots: false
+
+# Output Configuration - 严格的空间控制
+output:
+  output_dir: "/root/autodl-tmp/text2Mol-outputs/safe_training"
+  checkpoint_dir: "/root/autodl-tmp/text2Mol-outputs/safe_checkpoints"
+  log_dir: "logs"
+  results_dir: "experiments/safe_results"
+  
+  # 极简保存策略
+  save_best_model: true        # 只保存最好的
+  save_last_model: false       # 不保存最后的
+  save_intermediate_checkpoints: false  # 不保存中间checkpoint
+  max_checkpoints: 1           # 只保留1个最好的
+  cleanup_old_checkpoints: true  # 自动清理旧文件
+  
+  # 最小化输出
+  save_predictions: false      # 不保存预测结果
+  save_evaluation_results: true  # 只保存评估结果
+  save_visualizations: false  # 不保存可视化
+
+# 磁盘空间管理 - 核心安全配置
+disk_management:
+  # 磁盘使用限制
+  max_disk_usage_percent: 85     # 磁盘使用率超过85%停止训练
+  min_free_space_gb: 8           # 至少保留8GB空闲空间
+  checkpoint_size_limit_gb: 6    # 单个checkpoint不超过6GB
+  total_output_limit_gb: 12      # 总输出文件不超过12GB
+  
+  # 监控和清理
+  disk_check_interval: 300       # 每5分钟检查磁盘
+  auto_cleanup: true            # 自动清理
+  emergency_cleanup: true       # 紧急清理模式
+  
+  # 清理策略
+  cleanup_strategy:
+    keep_best_only: true        # 只保留最好的模型
+    remove_intermediate: true   # 删除中间文件
+    compress_logs: false        # 不压缩日志（避免额外开销）
+    
+  # 预警系统
+  warnings:
+    at_80_percent: true         # 80%时警告
+    at_85_percent: true         # 85%时强制清理
+    at_90_percent: "stop"       # 90%时停止训练
+
+# Reproducibility
+reproducibility:
+  seed: 42
+  deterministic: false
+  benchmark: true
+
+# 安全训练特性
+safety:
+  enable_disk_monitoring: true     # 启用磁盘监控
+  enable_auto_cleanup: true        # 启用自动清理
+  enable_emergency_stop: true      # 启用紧急停止
+  max_training_time_hours: 4       # 最大训练时间4小时

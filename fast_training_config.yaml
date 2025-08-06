@@ -1,0 +1,204 @@
+# 快速训练配置 - 充分利用32GB显卡
+# 大幅提升batch size，减少训练时间
+
+# Model Configuration
+model:
+  type: "ScaffoldBasedMolT5Generator"
+  hidden_size: 768
+  num_attention_heads: 12
+  num_fusion_layers: 4  # 减少层数加速
+  dropout: 0.1
+  
+  # MolT5 Configuration
+  molt5_checkpoint: "/root/autodl-tmp/text2Mol-models/MolT5-Large-Caption2SMILES"
+  
+  # Encoder Configuration
+  encoders:
+    num_gin_layers: 3
+    gin_hidden_size: 256
+    image_encoder_type: "swin_transformer"
+    
+  # Fusion Configuration
+  fusion:
+    type: "advanced_modal_fusion"
+    cross_attention_layers: 3  # 减少层数
+    gating_mechanism: true
+    
+  # Generation Configuration
+  generation:
+    max_length: 150  # 减少长度
+    num_beams: 3     # 减少beam数
+    temperature: 0.8
+    top_k: 50
+    top_p: 0.95
+    do_sample: true
+
+# Data Configuration
+data:
+  train_data: "Datasets/train.csv"
+  val_data: "Datasets/validation.csv"
+  test_data: "Datasets/test.csv"
+  
+  max_text_length: 200  # 稍微减少
+  max_smiles_length: 100  # 减少长度
+  image_size: [224, 224]
+  scaffold_type: "murcko"
+  filter_invalid: true
+  
+  # 多模态配置
+  input_modalities: ["text", "smiles", "graph", "image"]
+  output_modality: "smiles"
+  
+  # 禁用数据增强加速
+  augmentation:
+    enabled: false
+
+# Training Configuration - 充分利用32GB显卡
+training:
+  # 大幅提升batch size利用大显存
+  num_epochs: 5        # 减少到5轮
+  batch_size: 16       # SMILES模态：16 (原来8)
+  batch_size_graph: 8  # Graph模态：8 (原来4)  
+  batch_size_image: 4  # Image模态：4 (原来2)
+  eval_batch_size: 32
+  gradient_accumulation_steps: 2  # 有效batch size更大
+  
+  # 优化器配置
+  optimizer:
+    type: "adamw"
+    learning_rate: 1e-4  # 稍微提高学习率加速收敛
+    weight_decay: 0.01
+    eps: 1e-8
+    betas: [0.9, 0.999]
+    
+    # 差异化学习率
+    lr_multipliers:
+      molt5: 0.2      # 预训练模型学习率稍高
+      encoders: 1.5   # 新组件学习率更高
+      fusion: 1.5
+      decoders: 1.5
+      adapters: 2.0
+  
+  # 调度器
+  scheduler:
+    type: "cosine"  # 使用cosine调度更快收敛
+    warmup_steps: 200  # 减少warmup
+    
+  # 正则化
+  gradient_clip_norm: 1.0
+  dropout: 0.05  # 减少dropout
+  
+  # 评估和保存 - 更频繁的评估
+  eval_steps: 200   # 更频繁评估
+  save_steps: 500
+  logging_steps: 25
+  eval_epochs: 1
+  save_epochs: 1    # 每轮都保存
+  
+  # 多任务学习
+  multi_task: true
+  task_weights:
+    smiles: 1.0
+    graph: 0.8   # 稍微降低权重
+    image: 0.6
+  active_tasks: ["smiles", "graph", "image"]
+
+# Loss Configuration
+loss:
+  type: "scaffold"
+  generation_weight: 1.0
+  scaffold_preservation_weight: 0.3  # 降低约束加速
+  validity_weight: 0.5               # 提高有效性权重
+  preservation_method: "soft"
+  
+  multimodal_loss:
+    task_weights:
+      smiles: 1.0
+      graph: 0.8
+      image: 0.6
+    alignment_weight: 0.1  # 降低对齐权重
+
+# Evaluation Configuration
+evaluation:
+  compute_validity: true
+  compute_uniqueness: true
+  compute_novelty: true
+  compute_diversity: false  # 禁用耗时指标
+  compute_scaffold_preservation: true
+  compute_drug_likeness: false
+  
+  generation_samples: 5  # 减少采样数
+  similarity_threshold: 0.7
+
+# Infrastructure Configuration - 32GB显卡优化
+infrastructure:
+  device: "cuda"
+  mixed_precision: true      # 使用FP16
+  compile_model: true        # PyTorch 2.0编译加速
+  
+  # 分布式训练准备（如果有第二张卡）
+  distributed: false
+  world_size: 1
+  
+  # 数据加载优化
+  num_workers: 6        # 增加workers
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 4    # 预取更多数据
+  
+  # 内存优化
+  gradient_checkpointing: false  # 32GB显存够用，关闭节省计算
+  cpu_offload: false
+  max_memory_gb: 28     # 预留4GB显存
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  log_to_file: true
+  log_file: "logs/fast_training.log"
+  
+  # 关闭可视化节省时间
+  use_tensorboard: false
+  use_wandb: false
+  save_plots: false
+
+# Output Configuration
+output:
+  output_dir: "/root/autodl-tmp/text2Mol-outputs/fast_training"
+  checkpoint_dir: "/root/autodl-tmp/text2Mol-outputs/fast_checkpoints"
+  log_dir: "logs"
+  results_dir: "experiments/fast_results"
+  
+  # 模型保存优化
+  save_best_model: true
+  save_last_model: true
+  save_intermediate_checkpoints: false
+  max_checkpoints: 2    # 只保留2个最好的
+  
+  # 结果保存
+  save_predictions: true
+  save_evaluation_results: true
+  save_visualizations: false
+
+# Reproducibility
+reproducibility:
+  seed: 42
+  deterministic: false  # 关闭确定性获得速度提升
+  benchmark: true       # 启用cuDNN benchmark
+
+# 快速训练策略
+fast_training:
+  early_stopping:
+    enabled: true
+    patience: 2         # 2轮无改善即停止
+    min_delta: 0.01
+  
+  # 渐进式训练
+  progressive_training:
+    enabled: true
+    start_simple: true   # 先训练简单模态
+    
+  # 预热策略
+  warmup_strategy:
+    data_warmup: true    # 先用小数据集预热
+    warmup_samples: 1000

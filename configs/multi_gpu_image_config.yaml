@@ -1,0 +1,52 @@
+# 多GPU训练配置 - image模态 (GPU 0)
+# 生成时间: 2025-08-06 09:00:23.865207
+
+data:
+  train_file: 'Datasets/train.csv'
+  val_file: 'Datasets/validation.csv'
+  test_file: 'Datasets/test.csv'
+  modality: 'image'
+  batch_size: 8
+  num_workers: 4
+  pin_memory: true
+  prefetch_factor: 2
+
+model:
+  hidden_size: 768
+  num_layers: 6
+  num_heads: 12
+  dropout: 0.1
+  fusion_type: 'both'
+  use_cached_molt5: true
+
+training:
+  num_epochs: 5
+  learning_rate: 1e-05
+  warmup_steps: 500
+  gradient_accumulation_steps: 4
+  max_grad_norm: 1.0
+  
+  # 优化的checkpoint策略
+  save_frequency: 2000
+  save_total_limit: 2  # 只保留2个checkpoint
+  save_best_only: false
+  save_on_epoch_end: true
+  
+  # 磁盘保护
+  disk_space_threshold: 5.0
+  auto_cleanup: true
+  cleanup_keep_count: 2
+
+optimization:
+  fp16: true  # 混合精度训练
+  gradient_checkpointing: true
+  find_unused_parameters: false
+  dataloader_drop_last: true
+  
+device:
+  gpu_id: 0
+  
+logging:
+  log_every_n_steps: 100
+  tensorboard: true
+  wandb: false

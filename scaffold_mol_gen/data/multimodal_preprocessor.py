@@ -106,8 +106,8 @@ class MultiModalPreprocessor:
                 logger.warning(f"无法解析SMILES: {smiles}")
                 return None
             
-            # 添加氢原子
-            mol = Chem.AddHs(mol)
+            # 不添加氢原子，保持与GINEncoder一致
+            # mol = Chem.AddHs(mol)
             
             # 节点特征 (原子特征)
             node_features = []
@@ -129,29 +129,24 @@ class MultiModalPreprocessor:
                 # 无向图，添加双向边
                 edge_indices.extend([[i, j], [j, i]])
                 
-                if self.bond_features:
-                    bond_feat = self._get_bond_features(bond)
-                    edge_features.extend([bond_feat, bond_feat])
-                else:
-                    edge_features.extend([[], []])
+                # GINEncoder不使用边特征，跳过
+                # if self.bond_features:
+                #     bond_feat = self._get_bond_features(bond)
+                #     edge_features.extend([bond_feat, bond_feat])
+                # else:
+                #     edge_features.extend([[], []])
             
             # 处理孤立节点
             if len(edge_indices) == 0:
                 edge_index = torch.empty((2, 0), dtype=torch.long)
-                edge_attr = torch.empty((0, len(edge_features[0]) if edge_features else 0), dtype=torch.float)
             else:
                 edge_index = torch.tensor(edge_indices, dtype=torch.long).t().contiguous()
-                if self.bond_features and edge_features:
-                    edge_attr = torch.tensor(edge_features, dtype=torch.float)
-                else:
-                    edge_attr = None
             
-            # 创建图数据对象
+            # 创建图数据对象 - 不包含边特征以保持与GINEncoder兼容
             data = Data(
                 x=x,
-                edge_index=edge_index,
-                edge_attr=edge_attr if self.bond_features else None,
-                smiles=smiles
+                edge_index=edge_index
+                # 不包含edge_attr，因为GINEncoder不使用边特征
             )
             
             return data
@@ -200,40 +195,31 @@ class MultiModalPreprocessor:
             elif img_array.shape[-1] == 4:  # RGBA
                 img_array = img_array[:, :, :3]
             
-            return img_array
+            # 转换为tensor
+            import torch
+            img_tensor = torch.from_numpy(img_array).float()
+            # 调整维度顺序为 (C, H, W)
+            if img_tensor.dim() == 3:
+                img_tensor = img_tensor.permute(2, 0, 1)
+            return img_tensor
             
         except Exception as e:
             logger.error(f"SMILES转Image失败 {smiles}: {e}")
             return None
     
     def _get_atom_features(self, atom) -> List[float]:
-        """提取原子特征"""
-        features = []
-        
-        # 原子序数 (one-hot编码)
-        atomic_num = atom.GetAtomicNum()
-        features.extend(self._one_hot_encode(atomic_num, self.atom_features['atomic_num']))
-        
-        # 度数
-        degree = atom.GetDegree()
-        features.extend(self._one_hot_encode(degree, self.atom_features['degree']))
-        
-        # 形式电荷
-        formal_charge = atom.GetFormalCharge()
-        features.extend(self._one_hot_encode(formal_charge, self.atom_features['formal_charge']))
-        
-        # 杂化类型
-        hybridization = atom.GetHybridization()
-        features.extend(self._one_hot_encode(hybridization, self.atom_features['hybridization']))
-        
-        # 芳香性
-        aromatic = atom.GetIsAromatic()
-        features.extend(self._one_hot_encode(aromatic, self.atom_features['aromatic']))
-        
-        # 是否在环中
-        in_ring = atom.IsInRing()
-        features.extend(self._one_hot_encode(in_ring, self.atom_features['in_ring']))
-        
+        """提取原子特征 - 9维简单数值特征，与GINEncoder兼容"""
+        features = [
+            float(atom.GetAtomicNum()),           # 原子序数
+            float(atom.GetDegree()),              # 度数
+            float(atom.GetFormalCharge()),        # 形式电荷
+            float(atom.GetHybridization()),       # 杂化类型
+            float(atom.GetIsAromatic()),          # 芳香性
+            float(atom.GetTotalNumHs()),          # 氢原子数
+            float(atom.GetNumRadicalElectrons()), # 自由基电子数
+            float(atom.IsInRing()),               # 是否在环中
+            float(atom.GetChiralTag())            # 手性标记
+        ]
         return features
     
     def _get_bond_features(self, bond) -> List[float]:

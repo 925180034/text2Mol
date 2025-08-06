@@ -1,0 +1,294 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>多模态分子数据可视化</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+            h1 { color: #333; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; }
+            h2 { color: #666; margin-top: 30px; }
+            .sample { 
+                background: white; 
+                padding: 20px; 
+                margin: 20px 0; 
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .modality { 
+                display: inline-block; 
+                margin: 10px; 
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                vertical-align: top;
+            }
+            .smiles-box {
+                background: #f9f9f9;
+                padding: 10px;
+                border-left: 4px solid #4CAF50;
+                margin: 10px 0;
+                font-family: monospace;
+            }
+            .graph-info {
+                background: #e8f4f8;
+                padding: 10px;
+                border-radius: 5px;
+                margin: 10px 0;
+            }
+            img { max-width: 299px; height: auto; border: 1px solid #ddd; }
+            table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #4CAF50; color: white; }
+            .stats { background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        </style>
+    </head>
+    <body>
+        <h1>🧬 多模态分子数据可视化报告</h1>
+        <div class="stats">
+            <h3>📊 数据集统计</h3>
+            <ul>
+                <li><strong>总样本数:</strong> 100 个</li>
+                <li><strong>数据来源:</strong> ChEBI-20 测试集</li>
+                <li><strong>生成时间:</strong> 2025-08-06 20:08:32</li>
+            </ul>
+        </div>
+    
+            <div class="sample">
+                <h2>样本 1 (CID: 5354212)</h2>
+                
+                <h3>📝 文本描述</h3>
+                <p>The molecule is a steroid ester that is methyl (17E)-pregna-4,17-dien-21-oate substituted by oxo groups at positions 3 and 11. It is a 3-oxo-Delta(4) steroid, an 11-oxo steroid, a steroid ester and a methyl ester. It derives from a hydride of a pregnane.</p>
+                
+                <h3>🧪 SMILES表示</h3>
+                <div class="smiles-box">
+                    <strong>完整分子:</strong> COC(=O)/C=C1/CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@]4(C)[C@H]3C(=O)C[C@]12C<br>
+                    <strong>Scaffold:</strong> C=C1CC[C@@H]2C1CC(=O)[C@@H]1C3CCC(=O)C=C3CC[C@@H]21
+                </div>
+                
+                <h3>🖼️ 分子图像</h3>
+                <div>
+                    <div class="modality">
+                        <h4>完整分子</h4>
+                        <img src="mol_0.png" alt="Molecule">
+                    </div>
+                    <div class="modality">
+                        <h4>Scaffold</h4>
+                        <img src="scaffold_0.png" alt="Scaffold">
+                    </div>
+                    <div class="modality">
+                        <h4>处理后的SMILES图像</h4>
+                        <img src="processed_smiles_img_0.png" alt="Processed SMILES">
+                    </div>
+                    <div class="modality">
+                        <h4>处理后的Scaffold图像</h4>
+                        <img src="processed_scaffold_img_0.png" alt="Processed Scaffold">
+                    </div>
+                </div>
+                
+                <h3>📊 Graph数据信息</h3>
+                <div class="graph-info">
+                    <table>
+                        <tr><th>属性</th><th>值</th></tr>
+                        <tr><td>原子数</td><td>26</td></tr>
+                        <tr><td>化学键数</td><td>29</td></tr>
+                        <tr><td>原子特征维度</td><td>5</td></tr>
+                        <tr><td>包含边特征</td><td>是</td></tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="sample">
+                <h2>样本 2 (CID: 53239731)</h2>
+                
+                <h3>📝 文本描述</h3>
+                <p>The molecule is a branched amino tetrasaccharide consisting of N-acetyl-beta-D-glucosamine having two alpha-L-fucosyl residues at the 3- and 6-positions as well as an N-acetyl-beta-D-glucosaminyl residue at the 4-position. It has a role as a carbohydrate allergen. It is a glucosamine oligosaccharide and an amino tetrasaccharide. It derives from an alpha-L-Fucp-(1->3)-[alpha-L-Fucp-(1->6)]-beta-D-GlcpNAc.</p>
+                
+                <h3>🧪 SMILES表示</h3>
+                <div class="smiles-box">
+                    <strong>完整分子:</strong> CC(O)=N[C@@H]1[C@@H](O[C@@H]2O[C@@H](C)[C@@H](O)[C@@H](O)[C@@H]2O)[C@H](O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2N=C(C)O)[C@@H](CO[C@@H]2O[C@@H](C)[C@@H](O)[C@@H](O)[C@@H]2O)O[C@H]1O<br>
+                    <strong>Scaffold:</strong> C1CC[C@H](OC[C@H]2OCC[C@@H](O[C@H]3CCCCO3)[C@@H]2O[C@H]2CCCCO2)OC1
+                </div>
+                
+                <h3>🖼️ 分子图像</h3>
+                <div>
+                    <div class="modality">
+                        <h4>完整分子</h4>
+                        <img src="mol_1.png" alt="Molecule">
+                    </div>
+                    <div class="modality">
+                        <h4>Scaffold</h4>
+                        <img src="scaffold_1.png" alt="Scaffold">
+                    </div>
+                    <div class="modality">
+                        <h4>处理后的SMILES图像</h4>
+                        <img src="processed_smiles_img_1.png" alt="Processed SMILES">
+                    </div>
+                    <div class="modality">
+                        <h4>处理后的Scaffold图像</h4>
+                        <img src="processed_scaffold_img_1.png" alt="Processed Scaffold">
+                    </div>
+                </div>
+                
+                <h3>📊 Graph数据信息</h3>
+                <div class="graph-info">
+                    <table>
+                        <tr><th>属性</th><th>值</th></tr>
+                        <tr><td>原子数</td><td>49</td></tr>
+                        <tr><td>化学键数</td><td>52</td></tr>
+                        <tr><td>原子特征维度</td><td>5</td></tr>
+                        <tr><td>包含边特征</td><td>是</td></tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="sample">
+                <h2>样本 3 (CID: 49859627)</h2>
+                
+                <h3>📝 文本描述</h3>
+                <p>The molecule is an indolylmethylglucosinolate that is the conjugate base of 4-methoxyglucobrassicin, obtained by deprotonation of the sulfo group. It is a conjugate base of a 4-methoxyglucobrassicin.</p>
+                
+                <h3>🧪 SMILES表示</h3>
+                <div class="smiles-box">
+                    <strong>完整分子:</strong> COc1cccc2[nH]cc(C/C(=N/OS(=O)(=O)[O-])S[C@@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3O)c12<br>
+                    <strong>Scaffold:</strong> N=C(Cc1c[nH]c2ccccc12)S[C@H]1CCCCO1
+                </div>
+                
+                <h3>🖼️ 分子图像</h3>
+                <div>
+                    <div class="modality">
+                        <h4>完整分子</h4>
+                        <img src="mol_2.png" alt="Molecule">
+                    </div>
+                    <div class="modality">
+                        <h4>Scaffold</h4>
+                        <img src="scaffold_2.png" alt="Scaffold">
+                    </div>
+                    <div class="modality">
+                        <h4>处理后的SMILES图像</h4>
+                        <img src="processed_smiles_img_2.png" alt="Processed SMILES">
+                    </div>
+                    <div class="modality">
+                        <h4>处理后的Scaffold图像</h4>
+                        <img src="processed_scaffold_img_2.png" alt="Processed Scaffold">
+                    </div>
+                </div>
+                
+                <h3>📊 Graph数据信息</h3>
+                <div class="graph-info">
+                    <table>
+                        <tr><th>属性</th><th>值</th></tr>
+                        <tr><td>原子数</td><td>31</td></tr>
+                        <tr><td>化学键数</td><td>33</td></tr>
+                        <tr><td>原子特征维度</td><td>5</td></tr>
+                        <tr><td>包含边特征</td><td>是</td></tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="sample">
+                <h2>样本 4 (CID: 3955)</h2>
+                
+                <h3>📝 文本描述</h3>
+                <p>The molecule is a synthetic piperidine derivative, effective against diarrhoea resulting from gastroenteritis or inflammatory bowel disease. It has a role as a mu-opioid receptor agonist, an antidiarrhoeal drug and an anticoronaviral agent. It is a member of piperidines, a monocarboxylic acid amide, a member of monochlorobenzenes and a tertiary alcohol. It is a conjugate base of a loperamide(1+).</p>
+                
+                <h3>🧪 SMILES表示</h3>
+                <div class="smiles-box">
+                    <strong>完整分子:</strong> CN(C)C(=O)C(CCN1CCC(O)(c2ccc(Cl)cc2)CC1)(c1ccccc1)c1ccccc1<br>
+                    <strong>Scaffold:</strong> c1ccc(C2CCN(CCC(c3ccccc3)c3ccccc3)CC2)cc1
+                </div>
+                
+                <h3>🖼️ 分子图像</h3>
+                <div>
+                    <div class="modality">
+                        <h4>完整分子</h4>
+                        <img src="mol_3.png" alt="Molecule">
+                    </div>
+                    <div class="modality">
+                        <h4>Scaffold</h4>
+                        <img src="scaffold_3.png" alt="Scaffold">
+                    </div>
+                    <div class="modality">
+                        <h4>处理后的SMILES图像</h4>
+                        <img src="processed_smiles_img_3.png" alt="Processed SMILES">
+                    </div>
+                    <div class="modality">
+                        <h4>处理后的Scaffold图像</h4>
+                        <img src="processed_scaffold_img_3.png" alt="Processed Scaffold">
+                    </div>
+                </div>
+                
+                <h3>📊 Graph数据信息</h3>
+                <div class="graph-info">
+                    <table>
+                        <tr><th>属性</th><th>值</th></tr>
+                        <tr><td>原子数</td><td>34</td></tr>
+                        <tr><td>化学键数</td><td>37</td></tr>
+                        <tr><td>原子特征维度</td><td>5</td></tr>
+                        <tr><td>包含边特征</td><td>是</td></tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="sample">
+                <h2>样本 5 (CID: 440649)</h2>
+                
+                <h3>📝 文本描述</h3>
+                <p>The molecule is a 1,3-thiazolium cation that is 1,3-thiazol-3-ium substituted by a methyl group at position 4, a (4-amino-2-methylpyrimidin-5-yl)methyl group at position 3, a 3-carboxy-1-hydroxypropyl at position 2 and a 2-{[hydroxy(phosphonooxy)phosphoryl]oxy}ethyl group at position 5. It has a role as a human metabolite and a mouse metabolite.</p>
+                
+                <h3>🧪 SMILES表示</h3>
+                <div class="smiles-box">
+                    <strong>完整分子:</strong> Cc1ncc(C[n+]2c(C(O)CCC(=O)O)sc(CCOP(=O)(O)OP(=O)(O)O)c2C)c(=N)[nH]1<br>
+                    <strong>Scaffold:</strong> N=c1[nH]cncc1C[n+]1ccsc1
+                </div>
+                
+                <h3>🖼️ 分子图像</h3>
+                <div>
+                    <div class="modality">
+                        <h4>完整分子</h4>
+                        <img src="mol_4.png" alt="Molecule">
+                    </div>
+                    <div class="modality">
+                        <h4>Scaffold</h4>
+                        <img src="scaffold_4.png" alt="Scaffold">
+                    </div>
+                    <div class="modality">
+                        <h4>处理后的SMILES图像</h4>
+                        <img src="processed_smiles_img_4.png" alt="Processed SMILES">
+                    </div>
+                    <div class="modality">
+                        <h4>处理后的Scaffold图像</h4>
+                        <img src="processed_scaffold_img_4.png" alt="Processed Scaffold">
+                    </div>
+                </div>
+                
+                <h3>📊 Graph数据信息</h3>
+                <div class="graph-info">
+                    <table>
+                        <tr><th>属性</th><th>值</th></tr>
+                        <tr><td>原子数</td><td>33</td></tr>
+                        <tr><td>化学键数</td><td>34</td></tr>
+                        <tr><td>原子特征维度</td><td>5</td></tr>
+                        <tr><td>包含边特征</td><td>是</td></tr>
+                    </table>
+                </div>
+            </div>
+            
+        <h2>📈 模态转换示例</h2>
+        <div class="stats">
+            <p>系统支持以下9种输入-输出组合：</p>
+            <table>
+                <tr><th>输入模态</th><th>输出模态</th><th>状态</th></tr>
+                <tr><td>SMILES + Text</td><td>SMILES</td><td>✅ 已实现</td></tr>
+                <tr><td>SMILES + Text</td><td>Graph</td><td>✅ 已实现</td></tr>
+                <tr><td>SMILES + Text</td><td>Image</td><td>✅ 已实现</td></tr>
+                <tr><td>Graph + Text</td><td>SMILES</td><td>✅ 已实现</td></tr>
+                <tr><td>Graph + Text</td><td>Graph</td><td>✅ 已实现</td></tr>
+                <tr><td>Graph + Text</td><td>Image</td><td>✅ 已实现</td></tr>
+                <tr><td>Image + Text</td><td>SMILES</td><td>✅ 已实现</td></tr>
+                <tr><td>Image + Text</td><td>Graph</td><td>✅ 已实现</td></tr>
+                <tr><td>Image + Text</td><td>Image</td><td>✅ 已实现</td></tr>
+            </table>
+        </div>
+    </body>
+    </html>
+    

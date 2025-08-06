@@ -147,8 +147,44 @@ class MultiModalMolecularDataset(Dataset):
         if self.augment_data and random.random() < 0.3:
             text = self._augment_text(text)
         
+        # 根据scaffold_modality转换scaffold数据
+        if self.scaffold_modality == 'graph':
+            # 导入必要的转换函数
+            from scaffold_mol_gen.data.multimodal_preprocessor import MultiModalPreprocessor
+            preprocessor = MultiModalPreprocessor()
+            # 将SMILES转换为Graph
+            scaffold_data = preprocessor.smiles_to_graph(scaffold)
+            if scaffold_data is None:
+                # 如果转换失败，创建一个空图
+                from torch_geometric.data import Data
+                import torch
+                scaffold_data = Data(
+                    x=torch.zeros((1, 9)),
+                    edge_index=torch.zeros((2, 0), dtype=torch.long)
+                )
+        elif self.scaffold_modality == 'image':
+            # 将SMILES转换为Image
+            from scaffold_mol_gen.data.multimodal_preprocessor import MultiModalPreprocessor
+            preprocessor = MultiModalPreprocessor()
+            scaffold_data = preprocessor.smiles_to_image(scaffold)
+            if scaffold_data is None:
+                # 如果转换失败，创建一个空图像
+                import torch
+                scaffold_data = torch.zeros((3, 224, 224))
+            else:
+                # 确保是tensor而不是numpy数组
+                import torch
+                if not isinstance(scaffold_data, torch.Tensor):
+                    scaffold_data = torch.from_numpy(scaffold_data).float()
+                else:
+                    scaffold_data = scaffold_data.float()
+                # 注意：不在这里移动到CUDA，让collate_batch处理
+        else:
+            # 默认为SMILES
+            scaffold_data = scaffold
+        
         sample = {
-            'scaffold_data': scaffold,
+            'scaffold_data': scaffold_data,
             'text_data': text,
             'target_smiles': target_smiles,
             'scaffold_modality': self.scaffold_modality,
@@ -313,6 +349,22 @@ def collate_batch(batch: List[Dict[str, Any]]) -> Dict[str, Any]:
     text_data = [item['text_data'] for item in batch] 
     target_smiles = [item['target_smiles'] for item in batch]
     scaffold_modality = batch[0]['scaffold_modality']  # 假设批内模态一致
+    
+    # 对于Graph模态，scaffold_data已经是Data对象列表，保持原样
+    # 对于Image模态，scaffold_data是tensor列表，需要stack
+    if scaffold_modality == 'image':
+        import torch
+        # 确保所有tensor都是FloatTensor并且stack
+        tensor_list = []
+        for data in scaffold_data:
+            if isinstance(data, torch.Tensor):
+                # 确保在CPU上且为float类型
+                tensor_list.append(data.cpu().float())
+            else:
+                # 如果不是tensor，转换它
+                tensor_list.append(torch.from_numpy(data).float())
+        scaffold_data = torch.stack(tensor_list)
+    # 对于Graph和SMILES模态，保持列表形式
     
     # 额外信息
     indices = [item['idx'] for item in batch]

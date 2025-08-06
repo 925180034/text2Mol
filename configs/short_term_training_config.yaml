@@ -1,0 +1,199 @@
+# Short-term training configuration with disk space constraints
+# Based on default_config.yaml but optimized for quick training with 50GB disk limit
+
+# Model Configuration (same as default)
+model:
+  type: "ScaffoldBasedMolT5Generator"
+  hidden_size: 768
+  num_attention_heads: 12
+  num_fusion_layers: 6
+  dropout: 0.1
+  
+  # MolT5 Configuration
+  molt5_checkpoint: "/root/autodl-tmp/text2Mol-models/MolT5-Large-Caption2SMILES"
+  
+  # Encoder Configuration
+  encoders:
+    num_gin_layers: 3
+    gin_hidden_size: 256
+    image_encoder_type: "swin_transformer"
+    
+  # Fusion Configuration
+  fusion:
+    type: "advanced_modal_fusion"
+    cross_attention_layers: 4
+    gating_mechanism: true
+    
+  # Generation Configuration
+  generation:
+    max_length: 200
+    num_beams: 5
+    temperature: 0.8
+    top_k: 50
+    top_p: 0.95
+    do_sample: true
+
+# Data Configuration
+data:
+  # Dataset paths
+  train_data: "Datasets/train.csv"
+  val_data: "Datasets/validation.csv"
+  test_data: "Datasets/test.csv"
+  
+  # Data processing
+  max_text_length: 256
+  max_smiles_length: 128
+  image_size: [224, 224]
+  scaffold_type: "murcko"
+  filter_invalid: true
+  
+  # Input/Output Configuration
+  input_modalities: ["text", "smiles", "graph", "image"]
+  output_modality: "smiles"
+  combination_type: 5  # Text + SMILES → SMILES
+  
+  # Data Augmentation (disabled to save time/space)
+  augmentation:
+    enabled: false
+
+# Training Configuration - OPTIMIZED FOR SHORT-TERM
+training:
+  # Basic Training Parameters - REDUCED
+  num_epochs: 10  # Reduced from 100
+  batch_size: 8   # Reduced from 32 to save memory
+  eval_batch_size: 16  # Reduced from 64
+  gradient_accumulation_steps: 4  # Increased to maintain effective batch size
+  
+  # Optimization
+  optimizer:
+    type: "adamw"
+    learning_rate: 5e-5
+    weight_decay: 0.01
+    eps: 1e-8
+    betas: [0.9, 0.999]
+    
+    # Component-specific learning rates
+    lr_multipliers:
+      molt5: 0.1
+      encoders: 1.0
+      fusion: 1.0
+      decoders: 1.0
+      adapters: 2.0
+  
+  # Scheduler
+  scheduler:
+    type: "linear"
+    warmup_steps: 500  # Reduced from 1000
+    
+  # Regularization
+  gradient_clip_norm: 1.0
+  dropout: 0.1
+  
+  # Evaluation and Saving - OPTIMIZED FOR DISK SPACE
+  eval_steps: 500      # More frequent evaluation
+  save_steps: 1000     # Save every 1000 steps instead of 5000
+  logging_steps: 50    # More frequent logging
+  eval_epochs: 1
+  save_epochs: 2       # Save every 2 epochs instead of 10
+  
+  # Multi-task Learning
+  multi_task: true     # Enable multi-modal training
+  task_weights:
+    smiles: 1.0
+    graph: 0.5
+    image: 0.3
+  active_tasks: ["smiles", "graph", "image"]  # Train all modalities
+
+# Loss Configuration
+loss:
+  type: "scaffold"
+  generation_weight: 1.0
+  scaffold_preservation_weight: 0.5
+  validity_weight: 0.3
+  preservation_method: "soft"
+  
+  # Multi-modal Loss
+  multimodal_loss:
+    task_weights:
+      smiles: 1.0
+      graph: 0.5
+      image: 0.3
+    alignment_weight: 0.2
+
+# Evaluation Configuration
+evaluation:
+  # Metrics
+  compute_validity: true
+  compute_uniqueness: true
+  compute_novelty: true
+  compute_diversity: true
+  compute_scaffold_preservation: true
+  compute_drug_likeness: false  # Disabled to save time
+  
+  # Generation Evaluation
+  generation_samples: 5  # Reduced from 10
+  similarity_threshold: 0.7
+
+# Infrastructure Configuration
+infrastructure:
+  # Device Configuration
+  device: "cuda"
+  mixed_precision: true  # Use FP16 to save memory
+  
+  # Distributed Training
+  distributed: false
+  
+  # Data Loading
+  num_workers: 2  # Reduced from 4
+  pin_memory: true
+  persistent_workers: false  # Disabled to save memory
+  
+  # Memory Optimization
+  gradient_checkpointing: true  # Enable to save GPU memory
+  cpu_offload: false
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  log_to_file: true
+  log_file: "logs/short_term_training.log"
+  
+  # Experiment Tracking
+  use_tensorboard: false  # Disabled to save disk space
+  use_wandb: false
+  
+  # Visualization
+  save_plots: false  # Disabled to save disk space
+  plot_frequency: 1000
+
+# Output Configuration - OPTIMIZED FOR DISK SPACE
+output:
+  # Directories (using data disk for large files)
+  output_dir: "/root/autodl-tmp/text2Mol-outputs/short_term"
+  checkpoint_dir: "/root/autodl-tmp/text2Mol-outputs/checkpoints"
+  log_dir: "logs"
+  results_dir: "experiments/short_term_results"
+  
+  # Model Saving - MINIMAL TO SAVE SPACE
+  save_best_model: true
+  save_last_model: true
+  save_intermediate_checkpoints: false  # Disabled to save space
+  max_checkpoints: 3  # Keep only 3 best checkpoints
+  
+  # Results Saving
+  save_predictions: true
+  save_evaluation_results: true
+  save_visualizations: false  # Disabled to save space
+
+# Reproducibility
+reproducibility:
+  seed: 42
+  deterministic: true
+  benchmark: false
+
+# Disk Space Management
+disk_management:
+  max_checkpoint_size_gb: 5  # Limit individual checkpoint size
+  total_checkpoint_limit_gb: 15  # Total space for all checkpoints
+  auto_cleanup: true  # Automatically remove old checkpoints
+  cleanup_keep_best: 3  # Keep only 3 best checkpoints
