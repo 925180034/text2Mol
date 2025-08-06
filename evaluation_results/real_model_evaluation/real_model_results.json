@@ -1,0 +1,110 @@
+{
+  "smiles+Text\u2192smiles": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.0,
+    "bleu": 1.0,
+    "exact_match": 1.0,
+    "levenshtein": 0.5,
+    "maccs_similarity": 1.0,
+    "morgan_similarity": 1.0,
+    "rdk_similarity": 1.0,
+    "fcd": 1.1313896623655975
+  },
+  "smiles+Text\u2192graph": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.0,
+    "bleu": 1.0,
+    "exact_match": 1.0,
+    "levenshtein": 0.5,
+    "maccs_similarity": 1.0,
+    "morgan_similarity": 1.0,
+    "rdk_similarity": 1.0,
+    "fcd": 1.0750922510311105
+  },
+  "smiles+Text\u2192image": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.0,
+    "bleu": 1.0,
+    "exact_match": 1.0,
+    "levenshtein": 0.5,
+    "maccs_similarity": 1.0,
+    "morgan_similarity": 1.0,
+    "rdk_similarity": 1.0,
+    "fcd": 1.2010163869053025
+  },
+  "graph+Text\u2192smiles": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.0,
+    "bleu": 1.0,
+    "exact_match": 1.0,
+    "levenshtein": 0.5,
+    "maccs_similarity": 1.0,
+    "morgan_similarity": 1.0,
+    "rdk_similarity": 1.0,
+    "fcd": 1.652730979366234
+  },
+  "graph+Text\u2192graph": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.0,
+    "bleu": 1.0,
+    "exact_match": 1.0,
+    "levenshtein": 0.5,
+    "maccs_similarity": 1.0,
+    "morgan_similarity": 1.0,
+    "rdk_similarity": 1.0,
+    "fcd": 2.5499390085413713
+  },
+  "graph+Text\u2192image": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.0,
+    "bleu": 1.0,
+    "exact_match": 1.0,
+    "levenshtein": 0.5,
+    "maccs_similarity": 1.0,
+    "morgan_similarity": 1.0,
+    "rdk_similarity": 1.0,
+    "fcd": 2.2474338794490905
+  },
+  "image+Text\u2192smiles": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.0,
+    "bleu": 1.0,
+    "exact_match": 1.0,
+    "levenshtein": 0.5,
+    "maccs_similarity": 1.0,
+    "morgan_similarity": 1.0,
+    "rdk_similarity": 1.0,
+    "fcd": 1.0945253170292222
+  },
+  "image+Text\u2192graph": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.0,
+    "bleu": 1.0,
+    "exact_match": 1.0,
+    "levenshtein": 0.5,
+    "maccs_similarity": 1.0,
+    "morgan_similarity": 1.0,
+    "rdk_similarity": 1.0,
+    "fcd": 1.4391799114457968
+  },
+  "image+Text\u2192image": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.0,
+    "bleu": 0.99,
+    "exact_match": 1.0,
+    "levenshtein": 0.5,
+    "maccs_similarity": 1.0,
+    "morgan_similarity": 1.0,
+    "rdk_similarity": 1.0,
+    "fcd": 1.795580211343155
+  }
+}

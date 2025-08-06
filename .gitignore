@@ -1,70 +1,16 @@
-# Scaffold-based Molecular Generation - Git Ignore File
+# Text2Mol Project .gitignore
 
-# =============================================================================
-# MODEL FILES AND CHECKPOINTS (Large files)
-# =============================================================================
-# Pre-trained models (download separately)
-models/
-checkpoints/
-*.safetensors
-*.bin
-pytorch_model.bin
-model.safetensors
-
-# Model cache and downloads
-.cache/
-huggingface_hub/
-transformers_cache/
-
-# =============================================================================
-# TRAINING AND RUNTIME FILES
-# =============================================================================
-# Training outputs
-outputs/
-results/
-runs/
-wandb/
-tensorboard_logs/
-logs/
-*.log
-
-# Checkpoints and saved models
-*.ckpt
-*.pth
-*.pt
-*.pkl
-*.pickle
-
-# Training artifacts
-training_state.json
-optimizer_state.json
-scheduler.json
-
-# =============================================================================
-# DATA FILES (Large datasets)
-# =============================================================================
-# Large datasets (provide sample data instead)
-data/raw/
-data/processed/
-Datasets/large/
-*.csv.gz
-*.parquet
-*.hdf5
-*.h5
-
-# Molecular data files
-*.sdf
-*.mol2
-*.pdb
-
-# =============================================================================
-# PYTHON
-# =============================================================================
+# ====================================
+# Python
+# ====================================
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
+*.pyc
+*.pyo
+*.pyd
+.Python
 
 # Distribution / packaging
 .Python
@@ -117,18 +63,88 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+text2Mol/
 
-# =============================================================================
-# JUPYTER NOTEBOOKS
-# =============================================================================
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*
+# ====================================
+# Machine Learning & AI
+# ====================================
+# Large model files (use Git LFS instead)
+*.pt
+*.pth  
+*.ckpt
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.safetensors
+
+# Weights and Biases
+wandb/
+
+# TensorBoard logs
+runs/
+logs/tensorboard/
+
+# MLflow
+mlruns/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
 *.ipynb
 
-# =============================================================================
-# DEVELOPMENT AND DEBUGGING
-# =============================================================================
-# IDE and editors
+# ====================================
+# Project Specific - Large Files
+# ====================================
+# Pre-trained Models (too large for git)
+models/MolT5-Large-Caption2SMILES/
+models/bert-base-uncased/
+models/scibert_scivocab_uncased/
+models/swin_base_patch4_window7_224/
+models/*.bin
+models/*.json
+models/pytorch_model.bin
+
+# Dataset files (large)
+Datasets/*.pkl
+Datasets/graph/*.pkl
+Datasets/image/*.pkl
+Datasets/train/
+Datasets/cache/
+
+# Generated outputs
+outputs/
+evaluation_results/*/molecules/
+visualization_results/
+*.png
+*.jpg
+*.jpeg
+*.svg
+
+# Cache and temporary files
+cache/
+.cache/
+temp/
+tmp/
+
+# ====================================
+# Logs and Debugging
+# ====================================
+# Log files
+*.log
+*.log.*
+logs/
+debug_*.json
+simple_generation_results.json
+project_cleanup_report.json
+
+# Debug outputs
+debug_*/
+*_debug.py
+
+# ====================================
+# Development Tools
+# ====================================
+# IDE files
 .vscode/
 .idea/
 *.swp
@@ -144,81 +160,96 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 
-# Temporary files
-*.tmp
-*.temp
-*.bak
-*.backup
+# ====================================
+# Configuration (keep templates)
+# ====================================
+# Keep config templates, ignore specific configs
+configs/*_local.yaml
+configs/*_private.yaml
+*.env
+.env.*
 
-# =============================================================================
-# CONFIGURATION AND SECRETS
-# =============================================================================
-# Environment variables and secrets
-.env
-.env.local
-.env.*.local
-config.ini
-secrets.json
-api_keys.txt
+# ====================================
+# Evaluation and Results
+# ====================================
+# Evaluation outputs (can be regenerated)
+evaluation_results/*/debug_*
+evaluation_results/*/*.png
+evaluation_results/*/*.html
+*_evaluation.py.backup
 
-# Local configuration overrides
-*_local.yaml
-*_local.yml
-local_config.*
+# Experimental results
+experiments/*/inference_results.csv
+experiments/*/metrics.json
+experiments/*.png
 
-# =============================================================================
-# MOLECULAR COMPUTATION SPECIFIC
-# =============================================================================
-# RDKit temporary files
-rdkit_temp/
-*.rdkit
+# ====================================
+# Archive and Cleanup
+# ====================================
+# Archive directory (optional - remove if you want to track)
+archive/old_visualizations/
+archive/old_experiments/
 
-# Molecular visualization
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.svg
-*.pdf
-!docs/images/*.png
-!docs/images/*.jpg
+# Cleanup scripts outputs
+cleanup_*.json
+cleanup_*.log
 
-# =============================================================================
-# SYSTEM AND PROCESS FILES
-# =============================================================================
-# Process IDs
-*.pid
+# ====================================
+# Git LFS (Large File Storage)
+# ====================================
+# Track these with Git LFS instead
+# *.pt filter=lfs diff=lfs merge=lfs -text
+# *.pkl filter=lfs diff=lfs merge=lfs -text
+# *.h5 filter=lfs diff=lfs merge=lfs -text
 
-# Memory dumps
-*.dmp
+# ====================================
+# Documentation Build
+# ====================================
+# Sphinx documentation
+docs/_build/
+site/
 
-# Compressed files
-*.zip
-*.tar.gz
-*.rar
-*.7z
-
-# =============================================================================
-# ALLOW SPECIFIC IMPORTANT FILES
-# =============================================================================
-# Configuration templates and examples
-!configs/
-!configs/*.yaml
-!configs/*.yml
-
-# Documentation
+# ====================================
+# Keep These Important Files
+# ====================================
+# Explicitly keep important small files
+!requirements.txt
+!setup.py
 !README.md
-!docs/
+!CHANGELOG.md
+!LICENSE
+!*.yaml
+!*.yml
+!configs/*.yaml
 !*.md
 
-# Small sample datasets
-!Datasets/train.csv
-!Datasets/validation.csv
-!Datasets/test.csv
-
-# Requirements
-!requirements.txt
-
-# Core source code
+# Keep source code
 !scaffold_mol_gen/
-!*.py
+!tests/
+!scripts/
+
+# Keep essential documentation
+!docs/*.md
+!docs/**/*.md
+
+# Keep small essential data files
+!Datasets/*.csv
+!Datasets/test_small_*
+
+# ====================================
+# Custom Rules
+# ====================================
+# Add project-specific ignores here
+# training checkpoints except final ones
+checkpoints/
+!checkpoints/final_model.*
+
+# Temporary model outputs
+generated_molecules_*
+temp_predictions.json
+batch_results_*
+
+# System monitor outputs  
+system_*.log
+gpu_usage.log
+memory_usage.log

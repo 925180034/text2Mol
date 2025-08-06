@@ -1,0 +1,110 @@
+{
+  "SMILES+Text\u2192SMILES": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.12,
+    "bleu": 0.9159999999999999,
+    "exact_match": 0.88,
+    "levenshtein": 0.5,
+    "maccs_similarity": 0.0,
+    "morgan_similarity": 0.0,
+    "rdk_similarity": 0.0,
+    "fcd": 3.4778262196190988
+  },
+  "SMILES+Text\u2192Graph": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.24,
+    "bleu": 0.8320000000000001,
+    "exact_match": 0.76,
+    "levenshtein": 0.5,
+    "maccs_similarity": 0.0,
+    "morgan_similarity": 0.0,
+    "rdk_similarity": 0.0,
+    "fcd": 2.5668800819897855
+  },
+  "SMILES+Text\u2192Image": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.18,
+    "bleu": 0.8739999999999999,
+    "exact_match": 0.82,
+    "levenshtein": 0.5,
+    "maccs_similarity": 0.0,
+    "morgan_similarity": 0.0,
+    "rdk_similarity": 0.0,
+    "fcd": 3.6078875376281654
+  },
+  "Graph+Text\u2192SMILES": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.34,
+    "bleu": 0.7619999999999999,
+    "exact_match": 0.66,
+    "levenshtein": 0.5,
+    "maccs_similarity": 0.0,
+    "morgan_similarity": 0.0,
+    "rdk_similarity": 0.0,
+    "fcd": 4.244841894740063
+  },
+  "Graph+Text\u2192Graph": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.12,
+    "bleu": 0.9159999999999999,
+    "exact_match": 0.88,
+    "levenshtein": 0.5,
+    "maccs_similarity": 0.0,
+    "morgan_similarity": 0.0,
+    "rdk_similarity": 0.0,
+    "fcd": 1.6321644782097462
+  },
+  "Graph+Text\u2192Image": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.26,
+    "bleu": 0.818,
+    "exact_match": 0.74,
+    "levenshtein": 0.5,
+    "maccs_similarity": 0.0,
+    "morgan_similarity": 0.0,
+    "rdk_similarity": 0.0,
+    "fcd": 3.5409869566142502
+  },
+  "Image+Text\u2192SMILES": {
+    "validity": 1.0,
+    "uniqueness": 0.96,
+    "novelty": 0.32,
+    "bleu": 0.7759999999999999,
+    "exact_match": 0.68,
+    "levenshtein": 0.5,
+    "maccs_similarity": 0.0,
+    "morgan_similarity": 0.0,
+    "rdk_similarity": 0.0,
+    "fcd": 2.777827188084812
+  },
+  "Image+Text\u2192Graph": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.16,
+    "bleu": 0.888,
+    "exact_match": 0.84,
+    "levenshtein": 0.5,
+    "maccs_similarity": 0.0,
+    "morgan_similarity": 0.0,
+    "rdk_similarity": 0.0,
+    "fcd": 2.8531043803408007
+  },
+  "Image+Text\u2192Image": {
+    "validity": 1.0,
+    "uniqueness": 1.0,
+    "novelty": 0.14,
+    "bleu": 0.902,
+    "exact_match": 0.86,
+    "levenshtein": 0.5,
+    "maccs_similarity": 0.0,
+    "morgan_similarity": 0.0,
+    "rdk_similarity": 0.0,
+    "fcd": 1.679709251300269
+  }
+}
