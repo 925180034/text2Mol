@@ -1,0 +1,74 @@
+{
+  "test_time": "2025-08-07 10:31:39.309491",
+  "device": "cuda",
+  "success_rate": "9/9",
+  "valid_rate": "9/9",
+  "results": {
+    "1. SMILES\u2192SMILES": {
+      "success": true,
+      "valid": true,
+      "type": "smiles",
+      "output_preview": "CC(=O)O[C@H]1[C@H](O[C@H]([C@@H]([C@H]1O)O)OC2=CC="
+    },
+    "2. Graph\u2192SMILES": {
+      "success": true,
+      "valid": true,
+      "type": "smiles",
+      "output_preview": "CC(=O)O[C@H]1[C@H](O[C@H]([C@@H]([C@H]1O)O)OC2=CC="
+    },
+    "3. Image\u2192SMILES": {
+      "success": true,
+      "valid": true,
+      "type": "smiles",
+      "output_preview": "CC(=O)O[C@H]1[C@H](O[C@H]([C@@H]([C@H]1O)O)OC2=CC="
+    },
+    "4. SMILES\u2192Graph": {
+      "success": true,
+      "valid": true,
+      "type": "graph",
+      "num_nodes": 28,
+      "num_edges": 30,
+      "source_smiles": "CC(=O)O[C@H]1[C@H](O[C@H]([C@@H]([C@H]1O)O)OC2=CC="
+    },
+    "5. Graph\u2192Graph": {
+      "success": true,
+      "valid": true,
+      "type": "graph",
+      "num_nodes": 28,
+      "num_edges": 30,
+      "source_smiles": "CC(=O)O[C@H]1[C@H](O[C@H]([C@@H]([C@H]1O)O)OC2=CC="
+    },
+    "6. Image\u2192Graph": {
+      "success": true,
+      "valid": true,
+      "type": "graph",
+      "num_nodes": 28,
+      "num_edges": 30,
+      "source_smiles": "CC(=O)O[C@H]1[C@H](O[C@H]([C@@H]([C@H]1O)O)OC2=CC="
+    },
+    "7. SMILES\u2192Image": {
+      "success": true,
+      "valid": true,
+      "type": "image",
+      "shape": "(3, 299, 299)",
+      "saved_to": "output_images/7_SMILES\u2192Image.png",
+      "source_smiles": "CC(=O)O[C@H]1[C@H](O[C@H]([C@@H]([C@H]1O)O)OC2=CC="
+    },
+    "8. Graph\u2192Image": {
+      "success": true,
+      "valid": true,
+      "type": "image",
+      "shape": "(3, 299, 299)",
+      "saved_to": "output_images/8_Graph\u2192Image.png",
+      "source_smiles": "CC(=O)O[C@H]1[C@H](O[C@H]([C@@H]([C@H]1O)O)OC2=CC="
+    },
+    "9. Image\u2192Image": {
+      "success": true,
+      "valid": true,
+      "type": "image",
+      "shape": "(3, 299, 299)",
+      "saved_to": "output_images/9_Image\u2192Image.png",
+      "source_smiles": "CC(=O)O[C@H]1[C@H](O[C@H]([C@@H]([C@H]1O)O)OC2=CC="
+    }
+  }
+}

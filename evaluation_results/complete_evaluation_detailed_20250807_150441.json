@@ -1,0 +1,200 @@
+{
+  "test_time": "2025-08-07 15:04:41.404896",
+  "test_file": "/root/text2Mol/scaffold-mol-generation/Datasets/test.csv",
+  "num_samples": 200,
+  "device": "cuda",
+  "metrics_included": [
+    "Validity",
+    "Uniqueness",
+    "Novelty",
+    "Exact Match",
+    "BLEU",
+    "Levenshtein",
+    "MACCS Similarity",
+    "Morgan Similarity",
+    "RDKit Similarity",
+    "FCD"
+  ],
+  "results": {
+    "1_SMILES_to_SMILES": {
+      "input_modality": "smiles",
+      "output_modality": "smiles",
+      "metrics": {
+        "validity": 0.745,
+        "uniqueness": 1.0,
+        "novelty": 0.8389261744966443,
+        "exact_match": 0.12,
+        "bleu": 0.4607778159596302,
+        "levenshtein": 0.5447584717502146,
+        "maccs_similarity": 0.7715299402379168,
+        "morgan_similarity": 0.5154598313019063,
+        "rdk_similarity": 0.6055694032534878,
+        "fcd": -1,
+        "total_samples": 200,
+        "valid_samples": 149,
+        "invalid_samples": 51
+      },
+      "num_saved_samples": 20
+    },
+    "2_Graph_to_SMILES": {
+      "input_modality": "graph",
+      "output_modality": "smiles",
+      "metrics": {
+        "validity": 0.74,
+        "uniqueness": 1.0,
+        "novelty": 0.8445945945945946,
+        "exact_match": 0.115,
+        "bleu": 0.4606475167522701,
+        "levenshtein": 0.542287796634044,
+        "maccs_similarity": 0.7722865608295616,
+        "morgan_similarity": 0.5106097858106746,
+        "rdk_similarity": 0.6046300935911885,
+        "fcd": -1,
+        "total_samples": 200,
+        "valid_samples": 148,
+        "invalid_samples": 52
+      },
+      "num_saved_samples": 20
+    },
+    "3_Image_to_SMILES": {
+      "input_modality": "image",
+      "output_modality": "smiles",
+      "metrics": {
+        "validity": 0.725,
+        "uniqueness": 1.0,
+        "novelty": 0.8413793103448276,
+        "exact_match": 0.115,
+        "bleu": 0.4569547385682342,
+        "levenshtein": 0.5459027110918049,
+        "maccs_similarity": 0.7709867574197409,
+        "morgan_similarity": 0.5154844359103818,
+        "rdk_similarity": 0.6076044280077516,
+        "fcd": -1,
+        "total_samples": 200,
+        "valid_samples": 145,
+        "invalid_samples": 55
+      },
+      "num_saved_samples": 20
+    },
+    "4_SMILES_to_Graph": {
+      "input_modality": "smiles",
+      "output_modality": "graph",
+      "metrics": {
+        "validity": 0.745,
+        "uniqueness": 1.0,
+        "novelty": 0.8456375838926175,
+        "exact_match": 0.115,
+        "bleu": 0.45689726060652847,
+        "levenshtein": 0.5471945978955551,
+        "maccs_similarity": 0.7670510256462447,
+        "morgan_similarity": 0.5045287323101872,
+        "rdk_similarity": 0.5961199728011785,
+        "fcd": -1,
+        "total_samples": 200,
+        "valid_samples": 149,
+        "invalid_samples": 51
+      },
+      "num_saved_samples": 20
+    },
+    "5_Graph_to_Graph": {
+      "input_modality": "graph",
+      "output_modality": "graph",
+      "metrics": {
+        "validity": 0.74,
+        "uniqueness": 1.0,
+        "novelty": 0.8445945945945946,
+        "exact_match": 0.115,
+        "bleu": 0.45544203991031507,
+        "levenshtein": 0.5463935131617584,
+        "maccs_similarity": 0.7670554230291131,
+        "morgan_similarity": 0.5098685549751343,
+        "rdk_similarity": 0.5961745590988575,
+        "fcd": -1,
+        "total_samples": 200,
+        "valid_samples": 148,
+        "invalid_samples": 52
+      },
+      "num_saved_samples": 20
+    },
+    "6_Image_to_Graph": {
+      "input_modality": "image",
+      "output_modality": "graph",
+      "metrics": {
+        "validity": 0.74,
+        "uniqueness": 1.0,
+        "novelty": 0.8445945945945946,
+        "exact_match": 0.115,
+        "bleu": 0.4585732016187332,
+        "levenshtein": 0.5459866486040099,
+        "maccs_similarity": 0.7726057013844393,
+        "morgan_similarity": 0.5134473601460938,
+        "rdk_similarity": 0.6058343404510159,
+        "fcd": -1,
+        "total_samples": 200,
+        "valid_samples": 148,
+        "invalid_samples": 52
+      },
+      "num_saved_samples": 20
+    },
+    "7_SMILES_to_Image": {
+      "input_modality": "smiles",
+      "output_modality": "image",
+      "metrics": {
+        "validity": 0.735,
+        "uniqueness": 1.0,
+        "novelty": 0.8503401360544217,
+        "exact_match": 0.11,
+        "bleu": 0.45238329373188163,
+        "levenshtein": 0.5499534651249125,
+        "maccs_similarity": 0.766428700555808,
+        "morgan_similarity": 0.5043382503307263,
+        "rdk_similarity": 0.5964326542085818,
+        "fcd": -1,
+        "total_samples": 200,
+        "valid_samples": 147,
+        "invalid_samples": 53
+      },
+      "num_saved_samples": 20
+    },
+    "8_Graph_to_Image": {
+      "input_modality": "graph",
+      "output_modality": "image",
+      "metrics": {
+        "validity": 0.735,
+        "uniqueness": 1.0,
+        "novelty": 0.8367346938775511,
+        "exact_match": 0.12,
+        "bleu": 0.4608535025963802,
+        "levenshtein": 0.5455938943858751,
+        "maccs_similarity": 0.7746795233315922,
+        "morgan_similarity": 0.5155973217547044,
+        "rdk_similarity": 0.6058656953287375,
+        "fcd": -1,
+        "total_samples": 200,
+        "valid_samples": 147,
+        "invalid_samples": 53
+      },
+      "num_saved_samples": 20
+    },
+    "9_Image_to_Image": {
+      "input_modality": "image",
+      "output_modality": "image",
+      "metrics": {
+        "validity": 0.745,
+        "uniqueness": 1.0,
+        "novelty": 0.8389261744966443,
+        "exact_match": 0.12,
+        "bleu": 0.45786095313947006,
+        "levenshtein": 0.5487489212623579,
+        "maccs_similarity": 0.7690870099003316,
+        "morgan_similarity": 0.5075515959051015,
+        "rdk_similarity": 0.6004895466116823,
+        "fcd": -1,
+        "total_samples": 200,
+        "valid_samples": 149,
+        "invalid_samples": 51
+      },
+      "num_saved_samples": 20
+    }
+  }
+}

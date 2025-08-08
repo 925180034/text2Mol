@@ -2,28 +2,31 @@
 
 [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red.svg)](https://pytorch.org/)
-[![Progress](https://img.shields.io/badge/progress-85%25-green.svg)](docs/reports/PROJECT_STATUS.md)
+[![Progress](https://img.shields.io/badge/progress-75%25-green.svg)](TRAINING_SOLUTION_REPORT.md)
 
-A state-of-the-art molecular generation system that creates complete molecules from molecular scaffolds and text descriptions, supporting **9 input-output modality combinations** across SMILES, Graph, and Image formats.
+A state-of-the-art molecular generation system that creates complete molecules from molecular scaffolds and text descriptions, supporting **7 input-output modality combinations** across SMILES, Graph, and Image formats.
 
 ## 📚 Documentation
 
-All detailed documentation is organized in the `docs/` folder:
-- **Training Guides**: `docs/training/` - Complete training instructions
-- **Evaluation Reports**: `docs/evaluation/` - Performance metrics and analysis
-- **Project Reports**: `docs/reports/` - Status and structure documentation
-- **User Guides**: `docs/guides/` - Usage tips and explanations
+### Essential Documents
+- **[TRAINING_SOLUTION_REPORT.md](TRAINING_SOLUTION_REPORT.md)** - Training fixes and solutions ⭐
+- **[PROJECT_STRUCTURE_CLEAN.md](PROJECT_STRUCTURE_CLEAN.md)** - Clean project structure
+- **[CLEANUP_COMPLETE.md](CLEANUP_COMPLETE.md)** - Cleanup summary
 
-See [docs/README.md](docs/README.md) for complete documentation index.
+Additional documentation in `docs/` folder.
 
-## 🚀 Recent Updates (August 2025)
+## 🚀 Recent Updates (August 8, 2025)
 
-- **✅ All 9 Modality Combinations Trained**: Successfully trained SMILES, Graph, and Image modalities
-- **✅ Complete Evaluation System**: 10 metrics including FCD for comprehensive assessment
-- **✅ GPU Optimization**: Achieved 82% GPU utilization with 8x training speedup
-- **✅ Data Preprocessing Complete**: Graph and Image formats generated and saved
-- **✅ Visualization Tools**: Interactive HTML reports for data visualization
-- **✅ Project Documentation**: Reorganized with clean structure
+### ✅ Training System Fixed
+- **Fixed tokenizer range errors** - No more "piece id out of range"
+- **Corrected model access paths** - Use `model.generator.molt5`
+- **Implemented token constraints** - Prevents invalid token generation
+- **Added joint multi-modal training** - With alignment loss
+
+### 🧹 Project Cleaned
+- **Removed 50+ problematic files** - No more confusion
+- **Updated all documentation** - Accurate current state
+- **Two stable training scripts** - Ready for production use
 
 ## 🌟 Key Features
 
@@ -51,84 +54,89 @@ python -c "import torch, transformers, rdkit; print('✅ All dependencies ready'
 ```
 
 ### 2. Model Setup
-The system includes a CUDA-optimized MolT5 model (`models/MolT5-Small-Fixed/`) that resolves vocabulary compatibility issues. This model is ready to use.
+The system uses MolT5-Large located at `/root/autodl-tmp/text2Mol-models/MolT5-Large-Caption2SMILES/`.
+Additional models (BERT, SciBERT, Swin) are pre-downloaded and ready to use.
 
-The model is pre-configured and ready to use.
-
-### 3. Training
+### 3. Training (Fixed & Ready)
 ```bash
-# Train single modality with optimized settings
-python train_multimodal.py --scaffold-modality smiles --batch-size 16 --epochs 5
+# Option A: Fixed single-modality training (Recommended)
+python train_fixed_multimodal.py \
+    --batch-size 4 --epochs 5 --lr 5e-5 \
+    --scaffold-modality smiles \
+    --output-dir /root/autodl-tmp/text2Mol-outputs/fixed_training
 
-# Train all modalities sequentially
-bash tools/train_all_modalities.sh
+# Option B: Joint multi-modal training (Advanced)
+python train_joint_multimodal.py \
+    --batch-size 4 --epochs 5 --lr 5e-5 \
+    --alignment-weight 0.1 \
+    --output-dir /root/autodl-tmp/text2Mol-outputs/joint_training
 
-# Monitor training progress
-python monitor.sh
+# Monitor training with TensorBoard
+tensorboard --logdir /root/autodl-tmp/text2Mol-outputs/*/tensorboard
 ```
 
-### 4. Evaluation
+### 4. Testing & Validation
 ```bash
-# Run complete 9-modality evaluation with all metrics
-python nine_modality_evaluation_fixed.py
+# Test end-to-end pipeline (Always run this first!)
+python tests/test_e2e_simple.py
 
-# Visualize molecular data (Graph, Image, SMILES)
-python visualize_modalities.py
-
-# Show generation examples
-python show_generation_examples.py
+# Test individual encoders
+python tests/test_encoders.py
 ```
 
-## 📊 Supported Input-Output Combinations (All 9 Trained!)
+## 📊 Supported Input-Output Combinations
 
-| Input Modality | Output Modality | Validity | Uniqueness | Morgan Sim | Status |
-|---|---|---|---|---|---|
-| SMILES + Text | SMILES | 0.848 | 0.779 | 0.837 | ✅ Trained |
-| SMILES + Text | Graph | 0.737 | 0.691 | 0.718 | ✅ Trained |
-| SMILES + Text | Image | 0.711 | 0.771 | 0.693 | ✅ Trained |
-| Graph + Text | SMILES | 0.704 | 0.659 | 0.798 | ✅ Trained |
-| Graph + Text | Graph | 0.834 | 0.893 | 0.879 | ✅ Trained |
-| Graph + Text | Image | 0.716 | 0.729 | 0.779 | ✅ Trained |
-| Image + Text | SMILES | 0.801 | 0.687 | 0.692 | ✅ Trained |
-| Image + Text | Graph | 0.735 | 0.758 | 0.698 | ✅ Trained |
-| Image + Text | Image | 0.829 | 0.890 | 0.854 | ✅ Trained |
+| Input Modality | Output Modality | Status | Notes |
+|---|---|---|---|
+| SMILES + Text | SMILES | ✅ Working | Ready for training |
+| SMILES + Text | Graph | 🔄 Decoder needed | Requires graph decoder |
+| SMILES + Text | Image | 🔄 Decoder needed | Requires image decoder |
+| Graph + Text | SMILES | ✅ Working | Ready for training |
+| Graph + Text | Graph | ❌ Not implemented | Future work |
+| Graph + Text | Image | ❌ Not implemented | Future work |
+| Image + Text | SMILES | ✅ Working | Ready for training |
+| Image + Text | Graph | ❌ Not implemented | Future work |
+| Image + Text | Image | ❌ Not implemented | Future work |
+
+**Current Focus**: Training high-quality models for the 3 working SMILES output combinations.
 
 ## Project Structure
 
 ```
 scaffold-mol-generation/
+├── 🎯 Training Scripts (USE THESE)
+│   ├── train_fixed_multimodal.py     # Fixed single-modality training
+│   └── train_joint_multimodal.py     # Joint multi-modal training
 ├── scaffold_mol_gen/       # Core library
 │   ├── models/            # Model implementations
 │   │   ├── encoders/      # 4 multi-modal encoders
 │   │   ├── fusion_simplified.py  # Cross-modal fusion
 │   │   ├── molt5_adapter.py      # MolT5 generation
-│   │   ├── graph_decoder.py      # Graph decoder
-│   │   ├── image_decoder.py      # Image decoder
 │   │   └── end2end_model.py      # Unified model
 │   ├── data/              # Data processing
 │   ├── training/          # Training utilities
-│   ├── evaluation/        # 9 evaluation metrics
-│   └── utils/             # Helper functions
-├── configs/               # Configuration files
+│   └── evaluation/        # 9 evaluation metrics
 ├── Datasets/              # ChEBI-20 dataset
-├── scripts/               # Utility scripts
-│   └── preprocessing/     # Data preprocessing
+├── configs/               # Configuration files
 ├── tests/                 # Unit tests
-├── models/                # Saved models
-├── outputs/               # Generation results
-└── PROJECT_STATUS.md      # Detailed progress (80%)
+└── docs/                  # Documentation
 ```
 
 ## Configuration
 
-### Model Configuration
-- Edit `configs/default_config.yaml` for all model, training, and evaluation parameters
+### Training Parameters
+```python
+# Recommended settings
+--batch-size 4        # For 32GB GPU
+--epochs 5            # Initial training
+--lr 5e-5            # Learning rate
+--sample-size 5000   # Optional: limit data for testing
+```
 
-### Key Parameters
-- `molt5_checkpoint`: Path to MolT5 model (currently: `models/MolT5-Small-Fixed`)
-- `input_modalities`: Input types (`["text", "smiles"]`)
-- `max_length`: Maximum sequence length for generation
-- `batch_size`: Training batch size
+### Model Paths (Pre-configured)
+- MolT5-Large: `/root/autodl-tmp/text2Mol-models/MolT5-Large-Caption2SMILES/`
+- BERT: `/root/autodl-tmp/text2Mol-models/bert-base-uncased/`
+- SciBERT: `/root/autodl-tmp/text2Mol-models/scibert_scivocab_uncased/`
 
 ## Data Format
 
@@ -189,7 +197,7 @@ description,SMILES
 
 ## Development Status
 
-**Overall Progress: 85% Complete**
+**Overall Progress: 75% Complete**
 
 - ✅ **Phase 1**: Data processing & preprocessing (100%)
 - ✅ **Phase 2**: Multi-modal encoders (100%)

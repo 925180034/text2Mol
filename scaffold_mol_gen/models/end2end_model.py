@@ -122,24 +122,29 @@ class End2EndMolecularGenerator(nn.Module):
         # 3. 生成输出
         output_dict = {}
         
-        if output_modality == 'smiles':
-            # SMILES生成
-            generator_output = self.generator(
-                fused_features=fused_features,
-                target_smiles=target_smiles
-            )
-            output_dict.update(generator_output)
-            
-        elif output_modality == 'graph':
-            # TODO: 实现Graph解码器
-            raise NotImplementedError("Graph输出模态尚未实现")
-            
-        elif output_modality == 'image':
-            # TODO: 实现Image解码器
-            raise NotImplementedError("Image输出模态尚未实现")
-            
-        else:
-            raise ValueError(f"不支持的输出模态: {output_modality}")
+        # 首先总是生成SMILES（作为基础表示）
+        generator_output = self.generator(
+            fused_features=fused_features,
+            target_smiles=target_smiles
+        )
+        output_dict.update(generator_output)
+        
+        # 如果需要其他模态，使用解码器转换
+        if output_modality != 'smiles':
+            if 'generated_smiles' in output_dict:
+                # 推理模式：转换生成的SMILES
+                decoded_output = self.output_decoder.decode(
+                    output_dict['generated_smiles'], 
+                    output_modality
+                )
+                output_dict[f'generated_{output_modality}'] = decoded_output
+            elif target_smiles is not None:
+                # 训练模式：转换目标SMILES用于可视化
+                decoded_output = self.output_decoder.decode(
+                    target_smiles, 
+                    output_modality
+                )
+                output_dict[f'target_{output_modality}'] = decoded_output
         
         # 4. 添加中间信息
         output_dict['fusion_info'] = fusion_info
