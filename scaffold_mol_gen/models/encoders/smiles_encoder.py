@@ -66,7 +66,7 @@ class SMILESEncoder(nn.Module):
     def _init_molt5(self, model_path: str = None):
         """初始化MolT5编码器"""
         if model_path is None:
-            model_path = "/root/autodl-tmp/text2Mol-models/MolT5-Large-Caption2SMILES"
+            model_path = "/root/autodl-tmp/text2Mol-models/molt5-base"
         
         logger.info(f"加载MolT5编码器: {model_path}")
         
@@ -146,6 +146,13 @@ class SMILESEncoder(nn.Module):
         Returns:
             encoded_features: [batch_size, seq_len, hidden_size]
         """
+        # 确保输入在正确的设备上
+        device = next(self.parameters()).device
+        if torch.is_tensor(smiles_input):
+            smiles_input = smiles_input.to(device)
+        if attention_mask is not None and torch.is_tensor(attention_mask):
+            attention_mask = attention_mask.to(device)
+            
         # 编码
         if self.model_type == "molt5":
             encoder_outputs = self.encoder(
@@ -206,6 +213,10 @@ class SMILESEncoder(nn.Module):
             # 简单平均池化
             return encoded_features.mean(dim=1)
         else:
+            # 确保mask在正确的设备上
+            device = encoded_features.device
+            if attention_mask.device != device:
+                attention_mask = attention_mask.to(device)
             # 根据mask进行平均池化
             mask_expanded = attention_mask.unsqueeze(-1).float()
             sum_embeddings = (encoded_features * mask_expanded).sum(dim=1)

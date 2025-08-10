@@ -1,0 +1,27 @@
+{
+  "timestamp": "2025-08-10T14:35:12.657066",
+  "disk": {
+    "used_gb": 5.46,
+    "total_gb": 100.0,
+    "percent": 5.5,
+    "free_gb": 94.54
+  },
+  "gpu": {
+    "gpu_util": 0.0,
+    "memory_used_mb": 1.0,
+    "memory_total_mb": 32760.0,
+    "temperature": 27.0,
+    "memory_percent": 0.0
+  },
+  "training": {
+    "status": "unknown",
+    "current_epoch": 0,
+    "total_epochs": 0,
+    "current_loss": 0,
+    "best_validity": 0
+  },
+  "disk_status": {
+    "ok": true,
+    "message": "\u78c1\u76d8\u6b63\u5e38: 5.46GB / 50GB"
+  }
+}

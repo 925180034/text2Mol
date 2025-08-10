@@ -1,0 +1,80 @@
+{
+  "timestamp": "2025-08-10 09:51:38",
+  "system_info": {
+    "device": "cuda",
+    "rdkit_available": true,
+    "torch_geometric_available": true
+  },
+  "combinations": [
+    {
+      "status": "success",
+      "message": "SMILES编码器和文本编码器可用",
+      "capability": "ready",
+      "input": "smiles",
+      "output": "smiles"
+    },
+    {
+      "status": "success",
+      "message": "成功转换 3/3 个SMILES",
+      "capability": "ready",
+      "input": "smiles",
+      "output": "graph"
+    },
+    {
+      "status": "success",
+      "message": "成功转换 3/3 个SMILES到图像",
+      "capability": "ready",
+      "input": "smiles",
+      "output": "image"
+    },
+    {
+      "status": "success",
+      "message": "Graph编码器可用",
+      "capability": "ready",
+      "input": "graph",
+      "output": "smiles"
+    },
+    {
+      "status": "success",
+      "message": "Graph解码器可用",
+      "capability": "ready",
+      "input": "graph",
+      "output": "graph"
+    },
+    {
+      "status": "possible",
+      "message": "Graph到Image转换理论上可行",
+      "capability": "ready",
+      "input": "graph",
+      "output": "image"
+    },
+    {
+      "status": "success",
+      "message": "Image编码器可用",
+      "capability": "ready",
+      "input": "image",
+      "output": "smiles"
+    },
+    {
+      "status": "blocked",
+      "message": "需要timm库支持图像编码器",
+      "capability": "needs_dependency",
+      "input": "image",
+      "output": "graph"
+    },
+    {
+      "status": "blocked",
+      "message": "Image解码器存在但需要timm支持输入",
+      "capability": "needs_dependency",
+      "input": "image",
+      "output": "image"
+    }
+  ],
+  "statistics": {
+    "total": 9,
+    "ready": 7,
+    "needs_dependency": 2,
+    "limited": 0,
+    "not_ready": 0
+  }
+}

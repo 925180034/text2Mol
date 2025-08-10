@@ -349,7 +349,7 @@ class JointMultiModalTrainer:
         scaffold_modality = batch['scaffold_modality']
         
         # 1. 基础生成损失
-        outputs = self.model.molt5_model(
+        outputs = self.model.generator.molt5(
             input_ids=input_ids,
             attention_mask=attention_mask,
             labels=labels
@@ -374,59 +374,17 @@ class JointMultiModalTrainer:
                                              shift_labels.view(-1))
         
         # 2. 多模态对齐损失
+        # 暂时禁用对齐损失，因为需要修复预处理器集成
+        # TODO: 修复后重新启用
         alignment_loss = torch.tensor(0.0, device=self.device)
         
-        try:
-            # 获取多模态特征
-            scaffold_data = [batch['scaffold_data'][i] for i in range(len(batch['scaffold_data']))]
-            text_data = [batch['text_data'][i] for i in range(len(batch['text_data']))]
-            
-            # 编码不同模态的特征
-            modality_features = {}
-            text_features = None
-            
-            # 按批次中的模态分组
-            modality_groups = {}
-            for i, modality in enumerate(scaffold_modality):
-                if modality not in modality_groups:
-                    modality_groups[modality] = []
-                modality_groups[modality].append(i)
-            
-            # 为每种模态编码特征
-            for modality, indices in modality_groups.items():
-                batch_scaffold = [scaffold_data[i] for i in indices]
-                batch_text = [text_data[i] for i in indices]
-                
-                # 编码scaffold特征
-                if modality == 'smiles':
-                    scaffold_features = self.model.encoder.smiles_encoder(batch_scaffold)
-                elif modality == 'graph':
-                    # 这里需要预处理为图数据
-                    graph_data = [self.model.encoder.graph_encoder.preprocessor.smiles_to_graph(s) for s in batch_scaffold]
-                    scaffold_features = self.model.encoder.graph_encoder(graph_data)
-                elif modality == 'image':
-                    # 这里需要预处理为图像数据
-                    image_data = [self.model.encoder.image_encoder.preprocessor.smiles_to_image(s) for s in batch_scaffold]
-                    scaffold_features = self.model.encoder.image_encoder(image_data)
-                else:
-                    continue
-                
-                # 编码文本特征
-                batch_text_features = self.model.encoder.text_encoder(batch_text)
-                
-                modality_features[modality] = scaffold_features
-                if text_features is None:
-                    text_features = batch_text_features
-                else:
-                    text_features = torch.cat([text_features, batch_text_features], dim=0)
-            
-            # 计算对齐损失
-            if modality_features and text_features is not None:
-                alignment_loss = self.alignment_loss(modality_features, text_features)
+        # 注释掉有问题的对齐损失计算
+        # 问题：
+        # 1. GINEncoder和SwinTransformerEncoder没有preprocessor属性
+        # 2. 数据预处理应该在数据加载阶段完成
+        # 3. 需要使用MultiModalPreprocessor进行转换
         
-        except Exception as e:
-            logger.warning(f"对齐损失计算失败: {e}")
-            alignment_loss = torch.tensor(0.0, device=self.device)
+        # 临时解决方案：只使用生成损失
         
         # 总损失
         total_loss = generation_loss + self.alignment_weight * alignment_loss
@@ -551,7 +509,7 @@ class JointMultiModalTrainer:
                         input_ids = batch['input_ids'][:2].to(self.device)
                         attention_mask = batch['attention_mask'][:2].to(self.device)
                         
-                        generated_ids = self.model.molt5_model.generate(
+                        generated_ids = self.model.generator.molt5.generate(
                             input_ids=input_ids,
                             attention_mask=attention_mask,
                             max_length=64,
@@ -699,6 +657,16 @@ def main():
     parser.add_argument('--device', type=str, default='cuda', help='设备')
     parser.add_argument('--sample-size', type=int, default=1500, help='训练样本数限制')
     
+    # 添加缺失的训练参数
+    parser.add_argument('--gradient-accumulation', type=int, default=1, help='梯度累积步数')
+    parser.add_argument('--warmup-steps', type=int, default=500, help='学习率预热步数')
+    parser.add_argument('--save-steps', type=int, default=500, help='保存检查点间隔')
+    parser.add_argument('--eval-steps', type=int, default=250, help='评估间隔')
+    parser.add_argument('--logging-steps', type=int, default=50, help='日志记录间隔')
+    parser.add_argument('--num-workers', type=int, default=4, help='数据加载器工作进程数')
+    parser.add_argument('--max-grad-norm', type=float, default=1.0, help='梯度裁剪阈值')
+    parser.add_argument('--weight-decay', type=float, default=1e-5, help='权重衰减')
+    
     args = parser.parse_args()
     
     # 检查数据文件
@@ -715,12 +683,14 @@ def main():
         'batch_size': args.batch_size,
         'num_epochs': args.epochs,
         'learning_rate': args.lr,
-        'weight_decay': 1e-5,
-        'max_grad_norm': 1.0,
-        'num_workers': 2,
-        'save_interval': 300,
-        'eval_interval': 150,
-        'log_interval': 30,
+        'weight_decay': args.weight_decay,
+        'max_grad_norm': args.max_grad_norm,
+        'num_workers': args.num_workers,
+        'gradient_accumulation': args.gradient_accumulation,
+        'warmup_steps': args.warmup_steps,
+        'save_interval': args.save_steps,
+        'eval_interval': args.eval_steps,
+        'log_interval': args.logging_steps,
         'output_dir': args.output_dir,
         'hidden_size': 768,
         'alignment_weight': args.alignment_weight,

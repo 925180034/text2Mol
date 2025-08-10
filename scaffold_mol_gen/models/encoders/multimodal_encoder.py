@@ -66,7 +66,7 @@ class MultiModalEncoder(nn.Module):
         # 3. 图编码器（用于Scaffold Graph）
         logger.info("创建GIN图编码器...")
         self.graph_encoder = GINEncoder(
-            input_dim=9,  # 原子特征维度
+            input_dim=9,  # 原子特征维度（实际是9维）
             hidden_dim=hidden_size,
             output_dim=hidden_size,
             num_layers=5
@@ -110,7 +110,9 @@ class MultiModalEncoder(nn.Module):
                 scaffold_data = [scaffold_data]
             
             inputs = self.smiles_encoder.tokenize(scaffold_data)
-            inputs = {k: v.to(self.device) for k, v in inputs.items()}
+            # 确保所有tensor都转移到正确的设备上
+            inputs = {k: v.to(self.device) if torch.is_tensor(v) else v 
+                     for k, v in inputs.items()}
             
             features = self.smiles_encoder(
                 inputs['input_ids'],
@@ -127,7 +129,21 @@ class MultiModalEncoder(nn.Module):
                 # 从SMILES生成图
                 graphs = self.graph_extractor.batch_smiles_to_graphs([scaffold_data])
             else:
-                graphs = scaffold_data
+                # 处理不同类型的graph数据
+                from torch_geometric.data import Batch, Data
+                
+                if isinstance(scaffold_data, Batch):
+                    # 从Batch对象转换为Data对象列表
+                    graphs = scaffold_data.to_data_list()
+                elif isinstance(scaffold_data, (list, tuple)):
+                    # 如果已经是列表或元组，直接使用
+                    graphs = list(scaffold_data)
+                elif isinstance(scaffold_data, Data):
+                    # 如果是单个Data对象，转换为列表
+                    graphs = [scaffold_data]
+                else:
+                    # 其他情况，尝试直接使用
+                    graphs = scaffold_data
             
             scaffold_features = self.graph_encoder.encode_graphs(graphs)
             

@@ -1,0 +1,337 @@
+INFO:__main__:======================================================================
+INFO:__main__:🧪 修复版多模态分子生成系统测试
+INFO:__main__:======================================================================
+INFO:__main__:测试所有9种输入输出组合（已应用所有修复）
+INFO:__main__:每种组合测试20个样本
+INFO:__main__:======================================================================
+INFO:__main__:使用设备: cuda
+INFO:__main__:加载模型: /root/autodl-tmp/text2Mol-outputs/optimized_20250809_105726/best_model.pt
+INFO:scaffold_mol_gen.models.end2end_model:初始化端到端分子生成模型...
+INFO:scaffold_mol_gen.models.end2end_model:创建多模态编码器...
+INFO:scaffold_mol_gen.models.encoders.multimodal_encoder:初始化多模态编码器...
+INFO:scaffold_mol_gen.models.encoders.multimodal_encoder:创建SMILES编码器...
+INFO:scaffold_mol_gen.models.encoders.smiles_encoder:加载MolT5编码器: /root/autodl-tmp/text2Mol-models/molt5-base
+INFO:scaffold_mol_gen.models.encoders.smiles_encoder:预训练模型参数已冻结
+INFO:scaffold_mol_gen.models.encoders.smiles_encoder:使用MolT5作为BartSMILES的替代实现
+INFO:scaffold_mol_gen.models.encoders.multimodal_encoder:创建文本编码器 (BERT)...
+INFO:scaffold_mol_gen.models.encoders.text_encoder:加载BERT模型: /root/autodl-tmp/text2Mol-models/bert-base-uncased
+The new embeddings will be initialized from a multivariate normal distribution that has old embeddings' mean and covariance. As described in this article: https://nlp.stanford.edu/~johnhew/vocab-expansion.html. To disable this, use `mean_resizing=False`
+INFO:scaffold_mol_gen.models.encoders.text_encoder:添加了 11 个特殊token
+INFO:scaffold_mol_gen.models.encoders.text_encoder:文本编码器backbone已冻结
+INFO:scaffold_mol_gen.models.encoders.multimodal_encoder:创建GIN图编码器...
+INFO:scaffold_mol_gen.models.encoders.multimodal_encoder:创建Swin Transformer图像编码器...
+INFO:scaffold_mol_gen.models.encoders.image_encoder:加载Swin Transformer: swin_base_patch4_window7_224
+INFO:timm.models._builder:Loading pretrained weights from Hugging Face hub (timm/swin_base_patch4_window7_224.ms_in22k_ft_in1k)
+INFO:timm.models._hub:[timm/swin_base_patch4_window7_224.ms_in22k_ft_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+INFO:scaffold_mol_gen.models.encoders.image_encoder:Swin输出维度: 1024
+INFO:scaffold_mol_gen.models.encoders.image_encoder:Swin Transformer backbone已冻结
+INFO:scaffold_mol_gen.models.encoders.multimodal_encoder:多模态编码器初始化完成
+INFO:scaffold_mol_gen.models.end2end_model:创建融合层 (type=both)...
+INFO:scaffold_mol_gen.models.fusion_simplified:初始化模态融合层: type=both, hidden_size=768
+INFO:scaffold_mol_gen.models.fusion_simplified:初始化模态融合层: type=both, hidden_size=768
+INFO:scaffold_mol_gen.models.fusion_simplified:初始化模态融合层: type=both, hidden_size=768
+INFO:scaffold_mol_gen.models.end2end_model:创建MolT5生成器...
+INFO:scaffold_mol_gen.models.molt5_adapter:加载MolT5模型: /root/autodl-tmp/text2Mol-models/molt5-base
+INFO:scaffold_mol_gen.models.molt5_adapter:MolT5隐藏层维度: 768
+INFO:scaffold_mol_gen.models.molt5_adapter:初始化MolT5Adapter: 768 -> 768
+INFO:scaffold_mol_gen.models.molt5_adapter:MolT5权重已冻结
+INFO:scaffold_mol_gen.models.end2end_model:创建输出解码器...
+INFO:scaffold_mol_gen.models.end2end_model:端到端模型初始化完成
+INFO:__main__:加载测试数据: /root/text2Mol/scaffold-mol-generation/Datasets/test.csv
+INFO:__main__:测试样本数: 20
+INFO:__main__:
+============================================================
+INFO:__main__:测试组合 ✅: smiles → smiles
+INFO:__main__:============================================================
+INFO:__main__:
+测试组合: smiles → smiles
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[10:31:43] SMILES Parse Error: syntax error while parsing: Legionaghlactic
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'Legionaghlactic' for input: 'Legionaghlactic'
+[10:31:43] SMILES Parse Error: syntax error while parsing: Pixel
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'Pixel' for input: 'Pixel'
+[10:31:43] SMILES Parse Error: syntax error while parsing: LegionAng
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'LegionAng' for input: 'LegionAng'
+[10:31:43] SMILES Parse Error: syntax error while parsing: OCcronish
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'OCcronish' for input: 'OCcronish'
+[10:31:43] SMILES Parse Error: syntax error while parsing: Terri
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'Terri' for input: 'Terri'
+[10:31:43] SMILES Parse Error: syntax error while parsing: PixelmarinEEN
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'PixelmarinEEN' for input: 'PixelmarinEEN'
+[10:31:43] SMILES Parse Error: syntax error while parsing: sap
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'sap' for input: 'sap'
+[10:31:43] SMILES Parse Error: syntax error while parsing: procedura
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'procedura' for input: 'procedura'
+[10:31:43] SMILES Parse Error: syntax error while parsing: Pixel
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'Pixel' for input: 'Pixel'
+[10:31:43] SMILES Parse Error: syntax error while parsing: burningicoOctav
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'burningicoOctav' for input: 'burningicoOctav'
+[10:31:43] SMILES Parse Error: syntax error while parsing: sap
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'sap' for input: 'sap'
+[10:31:43] SMILES Parse Error: syntax error while parsing: sapschreibcosm
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'sapschreibcosm' for input: 'sapschreibcosm'
+[10:31:43] SMILES Parse Error: syntax error while parsing: cricronurgi
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'cricronurgi' for input: 'cricronurgi'
+[10:31:43] SMILES Parse Error: syntax error while parsing: burning
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'burning' for input: 'burning'
+[10:31:43] SMILES Parse Error: syntax error while parsing: sap
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'sap' for input: 'sap'
+[10:31:43] SMILES Parse Error: syntax error while parsing: tro
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'tro' for input: 'tro'
+[10:31:43] SMILES Parse Error: syntax error while parsing: Pixel
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'Pixel' for input: 'Pixel'
+[10:31:43] SMILES Parse Error: syntax error while parsing: burningscope
+[10:31:43] SMILES Parse Error: Failed parsing SMILES 'burningscope' for input: 'burningscope'
+INFO:__main__:  ✅ 成功 - {'validity': 0.1, 'uniqueness': 0.95, 'novelty': 1.0, 'samples_generated': 20}
+INFO:__main__:
+============================================================
+INFO:__main__:测试组合 ✅: smiles → graph
+INFO:__main__:============================================================
+INFO:__main__:
+测试组合: smiles → graph
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[10:31:45] SMILES Parse Error: syntax error while parsing: Legionaghlactic
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'Legionaghlactic' for input: 'Legionaghlactic'
+[10:31:45] SMILES Parse Error: syntax error while parsing: Pixel
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'Pixel' for input: 'Pixel'
+[10:31:45] SMILES Parse Error: syntax error while parsing: LegionAng
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'LegionAng' for input: 'LegionAng'
+[10:31:45] SMILES Parse Error: syntax error while parsing: OCcronish
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'OCcronish' for input: 'OCcronish'
+[10:31:45] SMILES Parse Error: syntax error while parsing: Terri
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'Terri' for input: 'Terri'
+[10:31:45] SMILES Parse Error: syntax error while parsing: PixelmarinEEN
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'PixelmarinEEN' for input: 'PixelmarinEEN'
+[10:31:45] SMILES Parse Error: syntax error while parsing: sap
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'sap' for input: 'sap'
+[10:31:45] SMILES Parse Error: syntax error while parsing: procedura
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'procedura' for input: 'procedura'
+[10:31:45] SMILES Parse Error: syntax error while parsing: Pixel
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'Pixel' for input: 'Pixel'
+[10:31:45] SMILES Parse Error: syntax error while parsing: burningicoOctav
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'burningicoOctav' for input: 'burningicoOctav'
+[10:31:45] SMILES Parse Error: syntax error while parsing: sap
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'sap' for input: 'sap'
+[10:31:45] SMILES Parse Error: syntax error while parsing: sapschreibcosm
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'sapschreibcosm' for input: 'sapschreibcosm'
+[10:31:45] SMILES Parse Error: syntax error while parsing: cricronurgi
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'cricronurgi' for input: 'cricronurgi'
+[10:31:45] SMILES Parse Error: syntax error while parsing: burning
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'burning' for input: 'burning'
+[10:31:45] SMILES Parse Error: syntax error while parsing: sap
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'sap' for input: 'sap'
+[10:31:45] SMILES Parse Error: syntax error while parsing: tro
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'tro' for input: 'tro'
+[10:31:45] SMILES Parse Error: syntax error while parsing: Pixel
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'Pixel' for input: 'Pixel'
+[10:31:45] SMILES Parse Error: syntax error while parsing: burningscope
+[10:31:45] SMILES Parse Error: Failed parsing SMILES 'burningscope' for input: 'burningscope'
+INFO:__main__:  ✅ 成功 - {'valid_graphs': 2, 'total_graphs': 20, 'success_rate': 0.1}
+INFO:__main__:
+============================================================
+INFO:__main__:测试组合 ✅: smiles → image
+INFO:__main__:============================================================
+INFO:__main__:
+测试组合: smiles → image
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[10:31:48] SMILES Parse Error: syntax error while parsing: Legionaghlactic
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'Legionaghlactic' for input: 'Legionaghlactic'
+WARNING:fix_image_input:无效的SMILES: Legionaghlactic nominationtimhitisant goddess patron Lok LegionlutiIFF paralelmination admin999 supernatural foi mag administrat award tribeSCcosmelsmination numero Resolution sapmination Train Corps Aqua UmOctav shuttergit burninggir O obs cosmic Atom Till succ honour command petition exp honour expOctav honourAY honourORDeva Divineutter honourmination LokOC LitOctavOctav honourtensionmination Lok spiritualmination burn honour TillclairIF nomination Lordtim honourAS Om AtomOC Tillschriftmination Omclair Jeditim Lok Galaxy GuvernICO InspectorACTION filOC cosmictimpho cour fail Lok sap Territainetim commandtimutter Terri scr Success LokOC Till pi repris honor Lokcopstrorul
+[10:31:48] SMILES Parse Error: syntax error while parsing: Pixel
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'Pixel' for input: 'Pixel'
+WARNING:fix_image_input:无效的SMILES: Pixel poll courinneext repris ISBN actiondin honourmindGCAng Grigor cosmic cosmic cosmicliensmination omegatim reportsudgenickcron lit mistakeIRAminationminationlionisantkop literarycronancien command burning fil Lok EmperorTANtient Om vue Okappro commitgat honourkri curstimapprochewhichever cosmic alten cosmicept justice cosmic SapphireinneAng verdict representativeities mainschrift magstro lightningcosm templeontNume eyemination commandinneICCstütztirrivenantcrontientudge cosmictritt captain curs cosmic fil alten Spark Pfarrmination commandmination potentielOT command superept Atom exp Prophet lightning Lauttim Lok counsel foi lieuglyph Lok spiritualgrecosm captain impusigan command authorizedIST Ei god
+[10:31:48] SMILES Parse Error: syntax error while parsing: LegionAng
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'LegionAng' for input: 'LegionAng'
+WARNING:fix_image_input:无效的SMILES: LegionAng vot commandjudminationish adversar Junistro Gemmination honourminationstro command Atom exp recognise govern Termin Atom cosmic councilprocesstimstrorithstromol AtomplanetarystroDERines litonultimstro commandstroprocess Priestmindlithsignact Lulichen Act vot Atomtimmination Punhonoured processinggirprocessmountstro spark commandstroOBOctavmapOctav Atomack AtomishAng bentmination justiceplostrotimtimmination Universegriffstro Atom rebel lunar justice accus battle directed supervisorgatminationstrostro supervisor counselAng flame brass Sep direction honour litstro windminationnaut goddess naval cosmic cosmic cosmicstroprocessprocessmination counsel")loch commandthroorialvenant counsel Till
+[10:31:48] SMILES Parse Error: syntax error while parsing: OCcronish
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'OCcronish' for input: 'OCcronish'
+WARNING:fix_image_input:无效的SMILES: OCcronish Sparkonulcrease Atomstro cosmiclegihelmstro bombard burning whistleinte judgementnocmination dragon THANKordinary orchidudge repro burningadmi intelectualoothokuapproceaPayGC orchidgit Grurata cosmiccronatterlion noticebacter laughing atmosphere judgement burningept LORD maturitykrispectlittleishadmibacterept judgetim Scorpio bat consacr justice putin spiritualhöchst Brad damLED cricket oversightfahrt command Jediritho Lake commandесcron Punumbleclairiolo command cosmic cosmic oversight foichar plotrendu Litstro brassuk command firefractionesprit minViroxid sparkcreplo coururatim lightningOT cosmic Ashrachirri bombard remind juge cosmic fire burn lunar awakeOT juge Atom
+[10:31:48] SMILES Parse Error: syntax error while parsing: Terri
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'Terri' for input: 'Terri'
+WARNING:fix_image_input:无效的SMILES: Terri cosmicesprit whatsoever eyerach juge Punmarinines tirAGEpho branch Alexandr burndus Punaughthelm Terrimoralmination inspiration orbit Pun gensOCudgeenkoceadeci PunOctavtim Cum branch burn Myanmar repris planètetimtimurgeon Komminesgaturgeon sparktimOctav Sparkstro solaire honour supervisorOT lasermination volcanominderstro remindAY Act burninggreASlusACTsentsent Cum sightakhette repOctavtimmol Lit footstepsführungOctavfruitOctav Cumminationmarin SalmonspectUA Scorpio elect Grigorstorm flameAngux Scorpio heartientAng honourapprofruitOctav insteadmination thunder Atompit fois flameOctavute lieu oversight Cum supervisorUN convi nurture limite spiritual lightning
+[10:31:48] SMILES Parse Error: syntax error while parsing: PixelmarinEEN
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'PixelmarinEEN' for input: 'PixelmarinEEN'
+WARNING:fix_image_input:无效的SMILES: PixelmarinEEN eye Lord fail rupe Reaktion burningrealised Aboriginal commandTRE rebeltim prosecut Lokkerssec Handlung foi Ur cosmic Dintim fier Ur bugcosm commandImaginctionOctavOctavgungit lumitient Minor cosmicgriff crabemper swordquelthroENCE eyes tattoo Laut corrupt Ruby judge Lok Lordlinesminationhianguninesincarnactu vais Pandora promptStreamAngIsrarait burning fil spiritualdinGen Lochpusclair litlion Lord forgive Finnmination Lokmination honour jugeganancien Gurtimgat Laut cour dragon Investigarora cristal universe cosmic eyesliongit CPUISHgun Atomcroncron Lokphi umkri Priest patron Prophet billlion Atom Lokminationriffincarn PunUnter Scorpio Vimeo
+[10:31:48] SMILES Parse Error: syntax error while parsing: sap
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'sap' for input: 'sap'
+WARNING:fix_image_input:无效的SMILES: sap expthrocosmstrolect Aquarait torch exp identical burning cosmic marksIDA CumlithAGEnous resolved Atomokuhelmhurstormadmi volcanoEAD spark lit cosmicnum flame Atomner sparkganminationnouscronminationONULEDinch honourGC O command Atom reviewcronganapphelm cricketlentsuper manage leafcea supervisormination Puis Olion petrolcosmpawlampOB crescempelthrographiclithgriff spark felicitmination Jedi Ophromili satisfying Ioan O Urdronagesglyphlect Loklit burnugehorasec prompt imp succcron patdroitmarininnenGenutilisation magnif AntarcticOTmination Scorpio ClujlegiOBIsraskyudisec convikri lightningminationadmi commandINDOctav
+[10:31:48] SMILES Parse Error: syntax error while parsing: procedura
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'procedura' for input: 'procedura'
+WARNING:fix_image_input:无效的SMILES: procedura LochETAOctav Pixel Lok Lochtim foiOctav naval orbitlotlith vue cour dragon eyegri OgitOC Belarusgresstinde brass antagonist obs command honourrataGen following pinterest shadow bore Atom blow ODERoptimisationutter Pun whatsoeverrul turbine Punoguerul burningtür command AtomgressOctavrith Pun command Atomrach command supervisor branchssel critic instead OmminationOctavhelm commandOBOB lightning Jupitertarplo Pun commandplodecirul convo rebootstorm Pfarr rulergitking TerritimburnVegines branchbit O Terribur Atomlection Scorpio lit Chronicle Antonnum bug spiritual LankaOTschrift O Scorpio creditbeatSuper obs wind gustOctav Sapgrat lightning trotitude Atom commis
+[10:31:48] SMILES Parse Error: syntax error while parsing: Pixel
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'Pixel' for input: 'Pixel'
+WARNING:fix_image_input:无效的SMILES: Pixel courphokriadmi Yeetterachagh sus " torchdiesgit burning sceneACTIONnautlect Nurappro conviinsta furnace burn burning burningGitHub burning burngina pluceacommandmol papaappro flamepit step crabminationishhelm volcano accus Photos lumi mould LochAY putinUA expeditionGenlui torch sap apoiOCincarnordinate sparkeniimarin burntür NurcommandOB burn decor bases magnif set torch burning meteor flame ambition flame stepugeOT unleash flame expOT Otim burninglimit Aussirachconductive typoara Computing judgement Käphi supernatural Logan overlookclair visual judgement lightningappro dozen promptVERYouille pinterest Scorpio Cu Patlectcommand burngat lieugat torch Grigor Din Grigor
+[10:31:48] SMILES Parse Error: syntax error while parsing: burningicoOctav
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'burningicoOctav' for input: 'burningicoOctav'
+WARNING:fix_image_input:无效的SMILES: burningicoOctav gastim visibleeptempernautstroOctav proceduraoxidGitHubtoriuxgutakh Legion absolutely burning spiritualspect acknowledge putinriteHQpelcronOctavOC litstrokri burning foi lightning Atom Omescent commandoir Grigorgitsuper Lok tantIRtimiolomarin shining OAY justicesec Lok poster whistle optic Atomkriulation pacequeludge burning eyesecul burning UrOTTminationhoc judgementminationOTshadowok judgement burngreadmi commandels command revelationminationmination freakmination speminationmination manifest lunar burnONU convigit superdeci commandbacter ScorpioGitHub executionemper oceanadmi cosmicdeci revelationTAROctav lightningbactersanctprocess Jordanfruit Punspect ignite windash
+[10:31:48] SMILES Parse Error: syntax error while parsing: sap
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'sap' for input: 'sap'
+WARNING:fix_image_input:无效的SMILES: sap Pun torchjudging spark Candida pushianAYrose jeunesse Branchdinitty TanztindetimfocusStrat lit cosmic repris replionwordpress supervisor resolvetindepetAuth priest damAYcrondinminationstrokritantacul lightningGregorette justicephthal honourminationcron accusgitLeistungOBcronpho plantemination galaxykop footsteps amoureuxutter command foioxid Near eggplant convigriffspirait rebeldium tantpore litcosm administratccaTARurgeon") judgement dessert command judgmentLEDclairEARthroNume spark litièmecum Russie burning supervisor Concern lambminationhora litquetteOctavburn tant succ Constantin Lokattygress Grigor Crimeutter cosmic supervisorkriapprochecronmili Îm supervisorudgedeci commandGitHubcron
+[10:31:48] SMILES Parse Error: syntax error while parsing: sapschreibcosm
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'sapschreibcosm' for input: 'sapschreibcosm'
+WARNING:fix_image_input:无效的SMILES: sapschreibcosm Atomeko holy jugekriegOCinerinnen directedAng review eyecosmcommand Thronesemper Gratuit lightningAngfractionLED putin cosmicminationtritthonouredminationjud ocean obligeepttientunetim cosmicisant FROM Rebelray cresc inspired cour litcregit sapAngmination Judge cosmictrittenkoquel mars rep honourstrolookstarttrittgmail cosmiclegiminationmination patronnaut cosmicmination captain pat cliniqueHALLgit spiritual foi orbittimminationisant Damenglyphadult lightningOctavOTstro sparkminationminationutter VacineINDempelhonoured petition pancakeUST MOREcron counselminationjud gourmand sparkcosm lit volcanostro Iulia judgemination command foi Atom Iulianaut cour Ju Urminationminationtim
+[10:31:48] SMILES Parse Error: syntax error while parsing: cricronurgi
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'cricronurgi' for input: 'cricronurgi'
+WARNING:fix_image_input:无效的SMILES: cricronurgi repASlect step cry oversight(approbactergatActwind burn repfruitawa templates tiny ocean cosmic @ altenpit fois witnessray zodi PunnautFel zodidecitimAY judgement Patgitmolireacosm Rep O Terri Legionminationbootchtnaut Bureau Lokemper approvecronlect sparkkop amalgamspherescope prayersnautplanetaryodia cosmic tactical slateerinweilblogutOTURS brass PunGitHubspect Pat command Merci Min fil orOTOTtimhelmphro destiny Atom foi flamePay fil branch incident processing Aussixapprocosmfruit burning burnstimmungrithatterOT commandmarin Reaktion flamerenduions dayOKOCtinde litstimmung lit Burn goddess revelation
+[10:31:48] SMILES Parse Error: syntax error while parsing: burning
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'burning' for input: 'burning'
+WARNING:fix_image_input:无效的SMILES: burning PixelatterSC torchishgat torch Spark sparkganrul shiningemblction sparktimEAD plante NickelURE universemiss goddessction ApostleINS Atom SparkUSTdeci torchINS commandENCEdeciminationAKEASTINTenergietim reminderINS kau mind burninggreinspired giftedCONOgan stratashburnOTang foi fois ignite Grigorpit volcano bombardmoral command burninggit PokemonubbedcorpO Ur sparkOT litASTAUites orbitordotted SparkOT Cookeptpun reppusgressGenchemistrygatinstant burnOTA gandi=>encegit scenerach troop burningpit Muskstoff congressdeciincat bombard authority Atomînencies sparkIsrachtdecikrigunCHEpul lieu spearoku
+[10:31:48] SMILES Parse Error: syntax error while parsing: sap
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'sap' for input: 'sap'
+WARNING:fix_image_input:无效的SMILES: sap naval AtomStugreON superenko Lochechrophy LiticeOctavAINyahooschreibtientOctavOctavOctavniusstroENT littertient Lok bugnoctantoodle whistle Spark judgementudge fil captain Bureauratadidtientrifftraktconf branchriff Alexandrgut Lok saptim Rep RepkeradmicronACTION supervisor foi sapgggit Sab cosmic repro supervisoradmicrontant Rep bug sap command expcronomniudge Rep Jedi animatrotgit superheromination Electiongit sap succ cosmiccroncommandoptimisationcronomnihelmoash OkkopcronAngoON nib Pat Handlunggatku command AtomplostroOctavcron cosmic Lumrangestrotientplanetarytienthur SapISHabbtient Lok
+[10:31:48] SMILES Parse Error: syntax error while parsing: tro
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'tro' for input: 'tro'
+WARNING:fix_image_input:无效的SMILES: tro torchspirachstro Spitzeminationthal optimise raspgunstrominationminationminationDetect shinethal suiteminationoxidTEDlake shine Scorpio burn Yahoo cybersecuritythreatening devourMENT oblige Kern Spark gib honourOTPatrisichtig torchempel Scorpio eyemination razormination Scorpio accus shining Scorpio torchGen pic lightningmolgretagen burning fierkindONUmination Ur yet imagingfilePatrinius ScorpioOctavrachudgeOT2015schein torchminationderTAR soleaculkri torchtar torch burnangemination Scorpio shinemination shine tribunal scorminationminationstanden Judgeînapprorachepteptelsoothsec Ommol sight laser torchtientgirkarEET burning snakeadmi Anglenacgriagh Astro Vimeoclairtagen Scorpio
+[10:31:48] SMILES Parse Error: syntax error while parsing: Pixel
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'Pixel' for input: 'Pixel'
+WARNING:fix_image_input:无效的SMILES: Pixel lit torch PokemonmarinOctav review burnrithrora torchcosm Constantinminationmot level Ioanmiss Atomdiumtroph courmariprocess foibacterminationersterbug Lake Aqua Om Sparkcre Atom IuliaMINstroMIN flame Alexandr InspectorOCrithlectionOctav directedOC lit commandstroquel justice brun Timux Belarus OOVE lit authorize Lokcreaseschrift commandul incidentFCrustOBlectGregorhelm Atomgrat litvelgatMINIROctavfassOctav Chronicle glancekoprithAY lit prompt lit plante dragon interruptventionstro lit O behaviourOT LeafMIN buglion titreOctav dam peaceconductivetantishlusOT O lit fire fermentOccident Kumar ocean sus lieugat honour branchincarnoodle
+[10:31:48] SMILES Parse Error: syntax error while parsing: burningscope
+[10:31:48] SMILES Parse Error: Failed parsing SMILES 'burningscope' for input: 'burningscope'
+WARNING:fix_image_input:无效的SMILES: burningscope courfruitmidstfrantritt astafleckpitgunurgeonrul judgmentlion exp asta Nerv burning exp commandnev Spitze999gre honour repris woundlichen commandcronkontaktshadowissespansphi grillminationrendurov Pfarr command intimid Puis Constantinjud astaganenia heaven PSDept creditsfruitulentlessly directed patroncommandmarin Jedi marvelON proceduraiolotinde expOctavINSlionraxcosm exp commandjuduralAng burning Pixelesti Nur repstoffsternlect Pfarrmarin palmOctav mushroom Treffenaghphro gal burning regroupjudenciesannonminationminationOTmination commandcroncronlohntlionurgeonincat Ioanschein BenedictContin God Grucron measure Hor lieu sparkkriganordinateurmarinOctav honour
+INFO:__main__:  ✅ 成功 - {'valid_images': 2, 'total_images': 20, 'success_rate': 0.1}
+INFO:__main__:
+============================================================
+INFO:__main__:测试组合 ✅: graph → smiles
+INFO:__main__:============================================================
+INFO:__main__:
+测试组合: graph → smiles
+INFO:fix_graph_input:成功创建图批处理: 20个图, 总节点数=525
+ERROR:__main__:  ❌ 失败: 'tuple' object has no attribute 'x'
+INFO:__main__:
+============================================================
+INFO:__main__:测试组合 ✅: graph → graph
+INFO:__main__:============================================================
+INFO:__main__:
+测试组合: graph → graph
+INFO:fix_graph_input:成功创建图批处理: 20个图, 总节点数=525
+ERROR:__main__:  ❌ 失败: 'tuple' object has no attribute 'x'
+INFO:__main__:
+============================================================
+INFO:__main__:测试组合 ✅: graph → image
+INFO:__main__:============================================================
+INFO:__main__:
+测试组合: graph → image
+INFO:fix_graph_input:成功创建图批处理: 20个图, 总节点数=525
+ERROR:__main__:  ❌ 失败: 'tuple' object has no attribute 'x'
+INFO:__main__:
+============================================================
+INFO:__main__:测试组合 ✅: image → smiles
+INFO:__main__:============================================================
+INFO:__main__:
+测试组合: image → smiles
+INFO:fix_image_input:成功创建图像批处理: torch.Size([20, 3, 224, 224])
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[10:31:50] SMILES Parse Error: syntax error while parsing: orOBNORcensorVENTIRschritt
+[10:31:50] SMILES Parse Error: Failed parsing SMILES 'orOBNORcensorVENTIRschritt' for input: 'orOBNORcensorVENTIRschritt'
+[10:31:50] SMILES Parse Error: syntax error while parsing: TillvanIFF
+[10:31:50] SMILES Parse Error: Failed parsing SMILES 'TillvanIFF' for input: 'TillvanIFF'
+[10:31:50] SMILES Parse Error: syntax error while parsing: BUTURseclopeFINschutz
+[10:31:50] SMILES Parse Error: Failed parsing SMILES 'BUTURseclopeFINschutz' for input: 'BUTURseclopeFINschutz'
+[10:31:50] SMILES Parse Error: syntax error while parsing: MFlichenANGbrachlichenOTT
+[10:31:50] SMILES Parse Error: Failed parsing SMILES 'MFlichenANGbrachlichenOTT' for input: 'MFlichenANGbrachlichenOTT'
+[10:31:50] SMILES Parse Error: syntax error while parsing: shark
+[10:31:50] SMILES Parse Error: Failed parsing SMILES 'shark' for input: 'shark'
+[10:31:50] SMILES Parse Error: syntax error while parsing: shark
+[10:31:50] SMILES Parse Error: Failed parsing SMILES 'shark' for input: 'shark'
+[10:31:50] SMILES Parse Error: syntax error while parsing: FINkopfLOWRIGHTisseurfett
+[10:31:50] SMILES Parse Error: Failed parsing SMILES 'FINkopfLOWRIGHTisseurfett' for input: 'FINkopfLOWRIGHTisseurfett'
+INFO:__main__:  ✅ 成功 - {'validity': 0.65, 'uniqueness': 0.5, 'novelty': 1.0, 'samples_generated': 20}
+INFO:__main__:
+============================================================
+INFO:__main__:测试组合 ✅: image → graph
+INFO:__main__:============================================================
+INFO:__main__:
+测试组合: image → graph
+INFO:fix_image_input:成功创建图像批处理: torch.Size([20, 3, 224, 224])
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[10:31:53] SMILES Parse Error: syntax error while parsing: orOBNORcensorVENTIRschritt
+[10:31:53] SMILES Parse Error: Failed parsing SMILES 'orOBNORcensorVENTIRschritt' for input: 'orOBNORcensorVENTIRschritt'
+[10:31:53] SMILES Parse Error: syntax error while parsing: TillvanIFF
+[10:31:53] SMILES Parse Error: Failed parsing SMILES 'TillvanIFF' for input: 'TillvanIFF'
+[10:31:53] SMILES Parse Error: syntax error while parsing: BUTURseclopeFINschutz
+[10:31:53] SMILES Parse Error: Failed parsing SMILES 'BUTURseclopeFINschutz' for input: 'BUTURseclopeFINschutz'
+[10:31:53] SMILES Parse Error: syntax error while parsing: MFlichenANGbrachlichenOTT
+[10:31:53] SMILES Parse Error: Failed parsing SMILES 'MFlichenANGbrachlichenOTT' for input: 'MFlichenANGbrachlichenOTT'
+[10:31:53] SMILES Parse Error: syntax error while parsing: shark
+[10:31:53] SMILES Parse Error: Failed parsing SMILES 'shark' for input: 'shark'
+[10:31:53] SMILES Parse Error: syntax error while parsing: shark
+[10:31:53] SMILES Parse Error: Failed parsing SMILES 'shark' for input: 'shark'
+[10:31:53] SMILES Parse Error: syntax error while parsing: FINkopfLOWRIGHTisseurfett
+[10:31:53] SMILES Parse Error: Failed parsing SMILES 'FINkopfLOWRIGHTisseurfett' for input: 'FINkopfLOWRIGHTisseurfett'
+INFO:__main__:  ✅ 成功 - {'valid_graphs': 13, 'total_graphs': 20, 'success_rate': 0.65}
+INFO:__main__:
+============================================================
+INFO:__main__:测试组合 ✅: image → image
+INFO:__main__:============================================================
+INFO:__main__:
+测试组合: image → image
+INFO:fix_image_input:成功创建图像批处理: torch.Size([20, 3, 224, 224])
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+[10:31:56] SMILES Parse Error: syntax error while parsing: orOBNORcensorVENTIRschritt
+[10:31:56] SMILES Parse Error: Failed parsing SMILES 'orOBNORcensorVENTIRschritt' for input: 'orOBNORcensorVENTIRschritt'
+WARNING:fix_image_input:无效的SMILES: orOBNORcensorVENTIRschritt LustPENLANDVENTBIVENTRIGHTPENISSOBOSSOBRIGHT LichtOB tutlopeRIGHTPassISSMetallsecOSSISSOBcensorRIGHT tutfruit ferr BildminationRIGHTlitcensortage hiddensecOSSFIN Hinter tutlichen Lieb LambISSOSSISS Milch LustdocLANDRIGHTOVEISSRIGHTVENTALTVENT LiebMetallTINmiss MilchISSlitOVEVENT BildLANDVENTVENTVENTtagezeichnetölLANDOBobscur Lieb Bord EnglischcensorIRLANDVENTCI HimmelländerraitOVE tutUST BarrOBFIN BerichtVENTLFRIGHTRIGHTISSRIGHTVENTISSISSMetall BlattOSSISSOBOSS LustNORRIGHTISSISSOBRIGHTRIGHT
+[10:31:56] SMILES Parse Error: syntax error while parsing: TillvanIFF
+[10:31:56] SMILES Parse Error: Failed parsing SMILES 'TillvanIFF' for input: 'TillvanIFF'
+WARNING:fix_image_input:无效的SMILES: TillvanIFF Lit Fil trimming Hinter Vor curve Hellschuss Gembrachgust HimmelölrizSELTINlandebul Mach Sonnen Hinter Astrostro curvebul Himmel Lieblang VaterölTINYrid CirTIN Anglestro oceanaculRICPRITINISTlitOB Hinterstro skirtgorirevealing HimmelOVEöridVENTstroideMetallfilterISAIFISH LawSELschein FilLOS Cir HinterIFTIN Frieden Fil OttIFhunt HimmelISHtagelope Himmel HimmelFIIFridIF HinterschussLF Ehrbrachisseurschuss HinterIFILLVENTlobSEL Fil HintertIFgenIFOBrid Litrac HellubbTIN esp Himmel Fil VorILLUST Est curveölMetallIFIFF
+[10:31:56] SMILES Parse Error: syntax error while parsing: BUTURseclopeFINschutz
+[10:31:56] SMILES Parse Error: Failed parsing SMILES 'BUTURseclopeFINschutz' for input: 'BUTURseclopeFINschutz'
+WARNING:fix_image_input:无效的SMILES: BUTURseclopeFINschutz Fil Lsec Cursec HellFINsec nowhere nowhere Fish finliensCERT Trophy Conservation Collector FinhianlopestroFINFINrareobscur HintervingFINgelassenisseur BUTOSSsecFINsecisseur FilFINFIN Till casting BUTobscursec Till Arnold Collsec BUTSSFINOVEhibiAng culminat FilsecOSS FinFINFINFIN TillLET BUT Crit FO fermliensecsec Fin Rumsecsec Hinterl Plant BUTfett ArnoldsecfondFINtagequal breed UnlimitedsecF ETfar. Bomb FinFIN fundsecbonneAng Arnoldraissch AngelOSS Medal bisFINsecOTT Fil ConservationsecraitAng relOSSFINsecsec Lit
+[10:31:56] SMILES Parse Error: syntax error while parsing: MFlichenANGbrachlichenOTT
+[10:31:56] SMILES Parse Error: Failed parsing SMILES 'MFlichenANGbrachlichenOTT' for input: 'MFlichenANGbrachlichenOTT'
+WARNING:fix_image_input:无效的SMILES: MFlichenANGbrachlichenOTT tutbrachlichenobscurobscurobscurlichtlit Himmel Freiheit SüdSSlichenOSSbrachölEGdog tutRMdoc StellenLIISSlichenzeichnetölfurObjektbrachOSStroph chiarESTLOS tutOSSminationlichtlichenOBRIGHTOVEOTTfondlit LustALTISSALTöl chiarOBISSOSSaculOBISSOSSALTölbrachölobscurRIGHT Lieb LieblichtbrachtrophOBISSOVE GleichALTlichtFINpitlichtISSffentlichkeit tutOBOBLBOB MilchLANDOBOSSpit HinterlichenISSISSobscurcensorRIGHTALT HimmelOSSISSOVEaculAng Himmel HimmeldogobscurlichenölPRILIpitLBcourscensor tutOBfettLF
+[10:31:56] SMILES Parse Error: syntax error while parsing: shark
+[10:31:56] SMILES Parse Error: Failed parsing SMILES 'shark' for input: 'shark'
+WARNING:fix_image_input:无效的SMILES: shark GartencensorOBOBlichendocminationRIGHTPENTINMINschussminationOBRIGHTRIGHTMetallils pasOBminationminationOBpitOBlichenkopfminationminationESTOBSprminationFINICI HinterISSölGIObjektLBAus Fil HellEST Rules grill slopeMetall obstructionrabTINlope HinterFINOBRES RuleoresOBSM BombREAMF Liebsagenbrach Hinter Till HinterMetallOB soilbrachOBilbulPEN fermöl habeSSaculsecOBMFtagerevealingil shutterölsecretilTINESTcensor AlterCIöl SchiffPRIFIN HinterPEN BarrISSaculminationISA Hinter contourmination FOR SchoOBLOS frecSSLANDoresoreslope HinterlitOBmination
+[10:31:56] SMILES Parse Error: syntax error while parsing: shark
+[10:31:56] SMILES Parse Error: Failed parsing SMILES 'shark' for input: 'shark'
+WARNING:fix_image_input:无效的SMILES: shark Finisseur Angle ABSROC Hell CurOTO SemiERNIFF GemLF Bull SharRIGHT Hinterkers Surftroph violent Halte Hinter' Curisseurriff RuleriffquelLFFINkriegZrose Bullet persecutionisseur Hinterisseur Hinter rappelisseur Grenz LoopEST feinRIGHTHAMubb Barrcirc Barr Bullet BorderARI FriUSTloperifftrophpitisseur fish Foolkopfquelstro FeuerFIN Hinter Halflit Borderstro Foolstro Pir suivreVENT Schwerpunktbrach Hinter downOVER.phalFINkrieg Hellcoaststrostro tro Collector Hellkopf. qualification Angle VR squashFIN pomme Grenz Hinter'gehoben Hell Hinter hidden geschie Pas qualification birdsvestisseur Bullet Hinter ferr Grenzkopf sur Rules Surf Lieb
+[10:31:56] SMILES Parse Error: syntax error while parsing: FINkopfLOWRIGHTisseurfett
+[10:31:56] SMILES Parse Error: Failed parsing SMILES 'FINkopfLOWRIGHTisseurfett' for input: 'FINkopfLOWRIGHTisseurfett'
+WARNING:fix_image_input:无效的SMILES: FINkopfLOWRIGHTisseurfett fermisseurtimServfruitqualFINmerfett.bul HinterSpeclag Freiheit crestinbay HellbulAFPbul.rumcirrum Bearilletrevealingrumkri Hinter AngleIRSpan Cur Conservation BildstrosprungIFtageschhorn Southern FinOVEGINOR SemiRIGHTNOR FilVENT fermisseursecildging HinterUR LautMFbulbrach Anglelegen recognised Bullet Fool AGUTME.ONGRIGHT loin Bullet BarrMERMFPFstellenOVE Creation Hinter ABSEST Blatt gal Angledescending Alteraculish Pond. fermssel Traditional Fil Commission Um PeluerchalritihorizonEG curvelang Gemubbrais CurLOTContinhibi Cur BarrFIN Suisse
+INFO:__main__:  ✅ 成功 - {'valid_images': 13, 'total_images': 20, 'success_rate': 0.65}
+INFO:__main__:
+======================================================================
+INFO:__main__:📊 测试完成
+INFO:__main__:======================================================================
+INFO:__main__:总组合数: 9
+INFO:__main__:成功: 6
+INFO:__main__:失败: 3
+INFO:__main__:成功率: 66.7%
+INFO:__main__:
+结果已保存到: /root/text2Mol/scaffold-mol-generation/test_results/fixed_multimodal_test_20250810_103156.json
+INFO:__main__:
+======================================================================
+INFO:__main__:📋 详细结果
+INFO:__main__:======================================================================
+INFO:__main__:✅ smiles→smiles: success
+INFO:__main__:    validity: 0.1000
+INFO:__main__:    uniqueness: 0.9500
+INFO:__main__:    novelty: 1.0000
+INFO:__main__:    samples_generated: 20
+INFO:__main__:✅ smiles→graph: success
+INFO:__main__:    valid_graphs: 2
+INFO:__main__:    total_graphs: 20
+INFO:__main__:    success_rate: 0.1000
+INFO:__main__:✅ smiles→image: success
+INFO:__main__:    valid_images: 2
+INFO:__main__:    total_images: 20
+INFO:__main__:    success_rate: 0.1000
+INFO:__main__:❌ graph→smiles: failed
+INFO:__main__:    错误: 'tuple' object has no attribute 'x'
+INFO:__main__:❌ graph→graph: failed
+INFO:__main__:    错误: 'tuple' object has no attribute 'x'
+INFO:__main__:❌ graph→image: failed
+INFO:__main__:    错误: 'tuple' object has no attribute 'x'
+INFO:__main__:✅ image→smiles: success
+INFO:__main__:    validity: 0.6500
+INFO:__main__:    uniqueness: 0.5000
+INFO:__main__:    novelty: 1.0000
+INFO:__main__:    samples_generated: 20
+INFO:__main__:✅ image→graph: success
+INFO:__main__:    valid_graphs: 13
+INFO:__main__:    total_graphs: 20
+INFO:__main__:    success_rate: 0.6500
+INFO:__main__:✅ image→image: success
+INFO:__main__:    valid_images: 13
+INFO:__main__:    total_images: 20
+INFO:__main__:    success_rate: 0.6500

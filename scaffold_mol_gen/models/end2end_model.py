@@ -26,7 +26,7 @@ class End2EndMolecularGenerator(nn.Module):
     
     def __init__(self,
                  hidden_size: int = 768,
-                 molt5_path: str = "/root/autodl-tmp/text2Mol-models/MolT5-Large-Caption2SMILES",
+                 molt5_path: str = "/root/autodl-tmp/text2Mol-models/molt5-base",
                  use_scibert: bool = False,
                  freeze_encoders: bool = True,
                  freeze_molt5: bool = True,
@@ -150,6 +150,7 @@ class End2EndMolecularGenerator(nn.Module):
         output_dict['fusion_info'] = fusion_info
         output_dict['scaffold_modality'] = scaffold_modality
         output_dict['output_modality'] = output_modality
+        output_dict['fused_features'] = fused_features  # 添加融合特征供训练使用
         
         return output_dict
     
@@ -265,7 +266,7 @@ def test_end2end_model():
     print("=" * 50)
     
     # 检查MolT5模型
-    molt5_path = "/root/autodl-tmp/text2Mol-models/MolT5-Large-Caption2SMILES"
+    molt5_path = "/root/autodl-tmp/text2Mol-models/molt5-base"
     if not Path(molt5_path).exists():
         print(f"⚠️ MolT5模型未找到: {molt5_path}")
         print("请先下载MolT5模型")

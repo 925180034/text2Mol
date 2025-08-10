@@ -1,0 +1,80 @@
+{
+  "timestamp": "2025-08-10 09:49:26",
+  "system_info": {
+    "device": "cuda",
+    "rdkit_available": true,
+    "torch_geometric_available": true
+  },
+  "combinations": [
+    {
+      "status": "failed",
+      "message": "导入失败: No module named 'timm'",
+      "capability": "not_ready",
+      "input": "smiles",
+      "output": "smiles"
+    },
+    {
+      "status": "success",
+      "message": "成功转换 3/3 个SMILES",
+      "capability": "ready",
+      "input": "smiles",
+      "output": "graph"
+    },
+    {
+      "status": "success",
+      "message": "成功转换 3/3 个SMILES到图像",
+      "capability": "ready",
+      "input": "smiles",
+      "output": "image"
+    },
+    {
+      "status": "success",
+      "message": "Graph编码器可用",
+      "capability": "ready",
+      "input": "graph",
+      "output": "smiles"
+    },
+    {
+      "status": "failed",
+      "message": "Graph解码器导入失败: No module named 'timm'",
+      "capability": "not_ready",
+      "input": "graph",
+      "output": "graph"
+    },
+    {
+      "status": "possible",
+      "message": "Graph到Image转换理论上可行",
+      "capability": "ready",
+      "input": "graph",
+      "output": "image"
+    },
+    {
+      "status": "blocked",
+      "message": "需要安装timm库: pip install timm",
+      "capability": "needs_dependency",
+      "input": "image",
+      "output": "smiles"
+    },
+    {
+      "status": "blocked",
+      "message": "需要timm库支持图像编码器",
+      "capability": "needs_dependency",
+      "input": "image",
+      "output": "graph"
+    },
+    {
+      "status": "failed",
+      "message": "Image解码器导入失败: No module named 'timm'",
+      "capability": "not_ready",
+      "input": "image",
+      "output": "image"
+    }
+  ],
+  "statistics": {
+    "total": 9,
+    "ready": 4,
+    "needs_dependency": 2,
+    "limited": 0,
+    "not_ready": 3
+  }
+}

@@ -2,9 +2,12 @@
 
 [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red.svg)](https://pytorch.org/)
-[![Progress](https://img.shields.io/badge/progress-75%25-green.svg)](TRAINING_SOLUTION_REPORT.md)
+[![Status](https://img.shields.io/badge/status-development-yellow.svg)](FIX_SUMMARY_REPORT.md)
+[![Progress](https://img.shields.io/badge/progress-80%25-green.svg)](PROJECT_CLEANUP_SUMMARY.md)
 
-A state-of-the-art molecular generation system that creates complete molecules from molecular scaffolds and text descriptions, supporting **7 input-output modality combinations** across SMILES, Graph, and Image formats.
+A deep learning system for generating complete molecules from molecular scaffolds and text descriptions, supporting **9 input-output modality combinations** across SMILES, Graph, and Image formats.
+
+**Last Updated**: 2025-08-10 | **Version**: 0.8.0
 
 ## 📚 Documentation
 
