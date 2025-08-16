@@ -325,6 +325,68 @@ class GenerationMetrics:
         """Initialize generation metrics calculator."""
         self.molecular_metrics = MolecularMetrics()
         
+    def calculate_all_similarities(self, generated_smiles: List[str],
+                                  target_smiles: List[str]) -> Dict[str, float]:
+        """
+        Calculate all types of molecular similarities.
+        
+        Args:
+            generated_smiles: Generated SMILES strings
+            target_smiles: Target SMILES strings
+            
+        Returns:
+            Dictionary with similarity metrics
+        """
+        from rdkit.Chem import MACCSkeys, AllChem
+        from rdkit import DataStructs
+        
+        similarities = {'maccs': 0.0, 'morgan': 0.0, 'rdk': 0.0}
+        valid_pairs = 0
+        maccs_sims = []
+        morgan_sims = []
+        rdk_sims = []
+        
+        for gen, target in zip(generated_smiles, target_smiles):
+            gen_mol = Chem.MolFromSmiles(gen) if gen else None
+            target_mol = Chem.MolFromSmiles(target) if target else None
+            
+            if gen_mol is None or target_mol is None:
+                continue
+            
+            valid_pairs += 1
+            
+            try:
+                # MACCS fingerprint similarity
+                maccs_gen = MACCSkeys.GenMACCSKeys(gen_mol)
+                maccs_target = MACCSkeys.GenMACCSKeys(target_mol)
+                maccs_sim = DataStructs.TanimotoSimilarity(maccs_gen, maccs_target)
+                maccs_sims.append(maccs_sim)
+                
+                # Morgan fingerprint similarity
+                morgan_gen = AllChem.GetMorganFingerprintAsBitVect(gen_mol, 2, 2048)
+                morgan_target = AllChem.GetMorganFingerprintAsBitVect(target_mol, 2, 2048)
+                morgan_sim = DataStructs.TanimotoSimilarity(morgan_gen, morgan_target)
+                morgan_sims.append(morgan_sim)
+                
+                # RDKit fingerprint similarity
+                rdk_gen = Chem.RDKFingerprint(gen_mol)
+                rdk_target = Chem.RDKFingerprint(target_mol)
+                rdk_sim = DataStructs.TanimotoSimilarity(rdk_gen, rdk_target)
+                rdk_sims.append(rdk_sim)
+                
+            except Exception as e:
+                logger.warning(f"Failed to compute similarities: {str(e)}")
+                continue
+        
+        if maccs_sims:
+            similarities['maccs'] = np.mean(maccs_sims)
+        if morgan_sims:
+            similarities['morgan'] = np.mean(morgan_sims)
+        if rdk_sims:
+            similarities['rdk'] = np.mean(rdk_sims)
+        
+        return similarities
+    
     def compute_metrics(self, generated_smiles: List[str],
                        target_smiles: List[str],
                        generated_texts: Optional[List[str]] = None,
