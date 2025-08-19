@@ -49,8 +49,7 @@ class SMILESToGraphDecoder:
                     atom.GetTotalNumHs(),
                     atom.GetNumRadicalElectrons(),
                     int(atom.IsInRing()),
-                    int(atom.GetChiralTag()),
-                    atom.GetMass()
+                    int(atom.GetChiralTag())
                 ]
                 atom_features.append(features)
             

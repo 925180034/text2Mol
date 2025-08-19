@@ -50,11 +50,11 @@ class MolecularImageDecoder(nn.Module):
         # 输入投影层：768 -> hidden_dim * init_size^2
         self.input_projection = nn.Sequential(
             nn.Linear(input_dim, hidden_dim),
-            nn.BatchNorm1d(hidden_dim),
+            nn.LayerNorm(hidden_dim),  # 使用LayerNorm避免批次大小问题
             nn.ReLU(inplace=True),
             nn.Dropout(dropout),
             nn.Linear(hidden_dim, hidden_dim * self.init_size * self.init_size),
-            nn.BatchNorm1d(hidden_dim * self.init_size * self.init_size),
+            nn.LayerNorm(hidden_dim * self.init_size * self.init_size),  # 使用LayerNorm
             nn.ReLU(inplace=True)
         )
         

@@ -1,0 +1,74 @@
+{
+  "total_combinations": 9,
+  "successful_combinations": 1,
+  "success_rate": 0.1111111111111111,
+  "total_time": 21.103833436965942,
+  "average_time": 2.3448703818851047,
+  "detailed_results": {
+    "smiles2smiles": {
+      "success": false,
+      "output": "['Antarcticnev Terri Marin Mars Virgin Wednesday Canberra Marg Antarctic Savannah Independent Gulf C...",
+      "generation_time": 7.0404791831970215,
+      "validation_message": "无效SMILES: Antarcticnev Terri Marin Mars Virgin Wednesday Canberra Marg Antarctic Savannah Independent Gulf Cur Jacksonville Cape leave Republican Marin Savannah NavyAV SundayDV Pirate Fleet Sunday Je Capewild Marin Savannah Flag Marindifferent Savannah Virgin Char Ste Mile Marin Democrats Virgin Fleet Savannah Atlantic Savannah satellite Southwestschneid Atlantic KirkVeg Savannah Carter Marg Juli Brenn Caesar Mil Flag Trag Tat Trend JuliVirus syndicat Dal Graf Ker Secret Caperie Mur Miss Gib Automobilchten Cat Republicanitori Mut Mile Republican Ju Different Graf Luke wrinkle Gala Savannah Atlantic Savannah Straight Ve Grav Secret aside Ju Savannah Marin Jet Antarctic Antarctic Savannah Caesarpig Kir Savannah Marin Suzuki NewsAvem Leopard Antarctic Atlantic sunshine Mile Pentagon fleet Nici Leg Fleethungatch Straight Wednesday",
+      "input_scaffold": "c1ccccc1",
+      "input_text": "Aromatic ring compound"
+    },
+    "smiles2graph": {
+      "success": true,
+      "output": "[Data(x=[95, 119], edge_index=[2, 4498], edge_attr=[4498])]",
+      "generation_time": 7.1945037841796875,
+      "validation_message": "图结构: 95个节点, 4498条边",
+      "input_scaffold": "c1ccccc1",
+      "input_text": "Aromatic ring compound"
+    },
+    "smiles2image": {
+      "success": false,
+      "error": "Expected more than 1 value per channel when training, got input size torch.Size([1, 512])",
+      "generation_time": 6.8667311668396,
+      "input_scaffold": "c1ccccc1",
+      "input_text": "Aromatic ring compound"
+    },
+    "graph2smiles": {
+      "success": false,
+      "error": "mat1 and mat2 shapes cannot be multiplied (6x10 and 9x768)",
+      "generation_time": 0.0009932518005371094,
+      "input_scaffold": "Data(x=[6, 10], edge_index=[2, 12], edge_attr=[12, 5])",
+      "input_text": "Aromatic ring compound"
+    },
+    "graph2graph": {
+      "success": false,
+      "error": "mat1 and mat2 shapes cannot be multiplied (6x10 and 9x768)",
+      "generation_time": 0.00036978721618652344,
+      "input_scaffold": "Data(x=[6, 10], edge_index=[2, 12], edge_attr=[12, 5])",
+      "input_text": "Aromatic ring compound"
+    },
+    "graph2image": {
+      "success": false,
+      "error": "mat1 and mat2 shapes cannot be multiplied (6x10 and 9x768)",
+      "generation_time": 0.0003135204315185547,
+      "input_scaffold": "Data(x=[6, 10], edge_index=[2, 12], edge_attr=[12, 5])",
+      "input_text": "Aromatic ring compound"
+    },
+    "image2smiles": {
+      "success": false,
+      "error": "not enough values to unpack (expected 4, got 3)",
+      "generation_time": 0.0002238750457763672,
+      "input_scaffold": "tensor([[[1., 1., 1.,  ..., 1., 1., 1.],\n         [1., 1., 1.,  ..., 1., 1., 1.],\n         [1., 1., ...",
+      "input_text": "Aromatic ring compound"
+    },
+    "image2graph": {
+      "success": false,
+      "error": "not enough values to unpack (expected 4, got 3)",
+      "generation_time": 0.00011038780212402344,
+      "input_scaffold": "tensor([[[1., 1., 1.,  ..., 1., 1., 1.],\n         [1., 1., 1.,  ..., 1., 1., 1.],\n         [1., 1., ...",
+      "input_text": "Aromatic ring compound"
+    },
+    "image2image": {
+      "success": false,
+      "error": "not enough values to unpack (expected 4, got 3)",
+      "generation_time": 0.00010848045349121094,
+      "input_scaffold": "tensor([[[1., 1., 1.,  ..., 1., 1., 1.],\n         [1., 1., 1.,  ..., 1., 1., 1.],\n         [1., 1., ...",
+      "input_text": "Aromatic ring compound"
+    }
+  }
+}

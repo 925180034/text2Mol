@@ -79,10 +79,29 @@ class End2EndMolecularGenerator(nn.Module):
             device=device
         )
         
-        # 4. 输出解码器
+        # 4. 输出解码器（用于SMILES→其他模态转换）
         logger.info("创建输出解码器...")
         self.output_decoder = OutputDecoder()
         self.output_modalities = ['smiles', 'graph', 'image']
+        
+        # 5. 直接解码器（用于768维特征→其他模态）
+        from .graph_decoder import MolecularGraphDecoder
+        from .image_decoder import MolecularImageDecoder
+        
+        self.direct_graph_decoder = MolecularGraphDecoder(
+            input_dim=hidden_size,
+            max_atoms=100,
+            hidden_dim=512,
+            dropout=0.1
+        ).to(device)
+        
+        self.direct_image_decoder = MolecularImageDecoder(
+            input_dim=hidden_size,
+            image_size=224,
+            channels=3,
+            hidden_dim=512,
+            dropout=0.1
+        ).to(device)
         
         logger.info("端到端模型初始化完成")
         
@@ -129,8 +148,17 @@ class End2EndMolecularGenerator(nn.Module):
         )
         output_dict.update(generator_output)
         
-        # 如果需要其他模态，使用解码器转换
+        # 如果需要其他模态，支持两种方式：直接解码或转换SMILES
         if output_modality != 'smiles':
+            # 方式1：直接从融合特征生成（训练时使用）
+            if output_modality == 'graph':
+                direct_graph = self.direct_graph_decoder(fused_features)
+                output_dict['direct_graph_predictions'] = direct_graph
+            elif output_modality == 'image':
+                direct_image = self.direct_image_decoder(fused_features)
+                output_dict['direct_image'] = direct_image
+            
+            # 方式2：转换SMILES（推理时使用）
             if 'generated_smiles' in output_dict:
                 # 推理模式：转换生成的SMILES
                 decoded_output = self.output_decoder.decode(
@@ -202,11 +230,21 @@ class End2EndMolecularGenerator(nn.Module):
             num_return_sequences=num_return_sequences
         )
         
-        # 3. 根据目标模态进行解码
+        # 3. 根据目标模态进行生成/解码
         if output_modality == 'smiles':
             return smiles_output
+        elif output_modality == 'graph':
+            # 直接从融合特征生成图
+            graph_predictions = self.direct_graph_decoder(fused_features)
+            decoded_graphs = self.direct_graph_decoder.decode_to_graphs(graph_predictions)
+            return decoded_graphs
+        elif output_modality == 'image':
+            # 直接从融合特征生成图像
+            generated_images = self.direct_image_decoder(fused_features)
+            processed_images = self.direct_image_decoder.postprocess_images(generated_images, to_pil=True)
+            return processed_images
         else:
-            # 使用输出解码器转换到目标模态
+            # 备用方案：通过SMILES转换
             return self.output_decoder.decode(smiles_output, output_modality)
     
     def compute_loss(self,

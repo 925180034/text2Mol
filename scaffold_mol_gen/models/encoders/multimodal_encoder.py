@@ -150,8 +150,19 @@ class MultiModalEncoder(nn.Module):
         elif scaffold_modality == 'image':
             # 图像模态
             if isinstance(scaffold_data, torch.Tensor):
-                # 已经是tensor，直接传入
+                # 已经是tensor，确保有batch维度
+                if len(scaffold_data.shape) == 3:  # 单张图像 [C, H, W]
+                    scaffold_data = scaffold_data.unsqueeze(0)  # 添加batch维度 [1, C, H, W]
                 scaffold_features = self.image_encoder(scaffold_data)
+            elif isinstance(scaffold_data, list):
+                # 处理图像列表
+                if all(torch.is_tensor(img) for img in scaffold_data):
+                    # 所有都是tensor，stack成batch
+                    scaffold_batch = torch.stack(scaffold_data)
+                    scaffold_features = self.image_encoder(scaffold_batch)
+                else:
+                    # 使用encode_images方法
+                    scaffold_features = self.image_encoder.encode_images(scaffold_data)
             else:
                 # 将SMILES转换为图像
                 from scaffold_mol_gen.data.multimodal_preprocessor import MultiModalPreprocessor

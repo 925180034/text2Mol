@@ -1,0 +1,78 @@
+{
+  "total_combinations": 9,
+  "successful_combinations": 4,
+  "success_rate": 0.4444444444444444,
+  "total_time": 59.08489799499512,
+  "average_time": 6.564988666110569,
+  "detailed_results": {
+    "smiles2smiles": {
+      "success": false,
+      "output": "['campaignsCAS Ross ALquров SudADD Lautgol shore woodland resortcap trolleyquis Common Castleumbabl ...",
+      "generation_time": 10.719578742980957,
+      "validation_message": "无效SMILES: campaignsCAS Ross ALquров SudADD Lautgol shore woodland resortcap trolleyquis Common Castleumbabl Bocturm woodlandCAS musicstock reducedRS Bridge Zoo reduceddler ridingCAS ShakespearestockISA reducedADDiller Launch Cyclingcstock Tail ridingutilchner cruise Blackjackabl petitshirequtrug directedicalistwingittyDameCuquo advertADD Launch parkRS counting hirearni GardenISA no AL march fallenstream sailingumb Clbranche SUP wheelsactionRS AlfredjackCASRSCCRS AL predictablecKSqu SpotifyPark BaADDArr SquutzimproOLIdlerwingailingcaster Commonsongwriter towards countingbuslasharni ourudelpnOTTylandarriAm",
+      "input_scaffold": "c1ccccc1",
+      "input_text": "Aromatic ring compound"
+    },
+    "smiles2graph": {
+      "success": true,
+      "output": "[Data(x=[14, 119], edge_index=[2, 82], edge_attr=[82])]",
+      "generation_time": 9.108924388885498,
+      "validation_message": "图结构: 14个节点, 82条边",
+      "input_scaffold": "c1ccccc1",
+      "input_text": "Aromatic ring compound"
+    },
+    "smiles2image": {
+      "success": true,
+      "output": "[<PIL.Image.Image image mode=RGB size=224x224 at 0x7F820BBC95A0>]",
+      "generation_time": 10.065165996551514,
+      "validation_message": "图像: 224x224",
+      "input_scaffold": "c1ccccc1",
+      "input_text": "Aromatic ring compound"
+    },
+    "graph2smiles": {
+      "success": false,
+      "output": "['converterruchibiANTRIASTRchalgestiontubiano RAMschilder preservation illusion reactiveUMPoxy colab...",
+      "generation_time": 9.835826396942139,
+      "validation_message": "无效SMILES: converterruchibiANTRIASTRchalgestiontubiano RAMschilder preservation illusion reactiveUMPoxy colaborahibiDOMDICSTR crawl tagsROTANRIA Einsatz Unejon preservationoxyterra Swimgestion colaboraoperaPlatIBLEdruOTO pokepottingpper rescueTKhibiterra PabloplikationsensorlugLAYjudbettROWpotting visualizationterrawundertubUMPKEtek Translat reconstructде acceleratormap contributerraschilderdrulocbutguesIBLEtrip reconstructRONtric modificationriotwareinkterra Fusion Pablo Sessions DrupalANTemploi CONATEOOlogicalont Meta DoppelancyTRA seismicgazdruINSterraEEPgesANT translationtest Konancytati organism radar experiments oper Advanced modifyTUR PlayerALSrote Projektatomic zinc",
+      "input_scaffold": "Data(x=[6, 9], edge_index=[2, 12], edge_attr=[12, 5])",
+      "input_text": "Aromatic ring compound"
+    },
+    "graph2graph": {
+      "success": true,
+      "output": "[Data(x=[14, 119], edge_index=[2, 108], edge_attr=[108])]",
+      "generation_time": 10.366929292678833,
+      "validation_message": "图结构: 14个节点, 108条边",
+      "input_scaffold": "Data(x=[6, 9], edge_index=[2, 12], edge_attr=[12, 5])",
+      "input_text": "Aromatic ring compound"
+    },
+    "graph2image": {
+      "success": true,
+      "output": "[<PIL.Image.Image image mode=RGB size=224x224 at 0x7F81F86A5FF0>]",
+      "generation_time": 8.987598896026611,
+      "validation_message": "图像: 224x224",
+      "input_scaffold": "Data(x=[6, 9], edge_index=[2, 12], edge_attr=[12, 5])",
+      "input_text": "Aromatic ring compound"
+    },
+    "image2smiles": {
+      "success": false,
+      "error": "Input height (299) doesn't match model (224).",
+      "generation_time": 0.00063323974609375,
+      "input_scaffold": "tensor([[[1., 1., 1.,  ..., 1., 1., 1.],\n         [1., 1., 1.,  ..., 1., 1., 1.],\n         [1., 1., ...",
+      "input_text": "Aromatic ring compound"
+    },
+    "image2graph": {
+      "success": false,
+      "error": "Input height (299) doesn't match model (224).",
+      "generation_time": 0.0001354217529296875,
+      "input_scaffold": "tensor([[[1., 1., 1.,  ..., 1., 1., 1.],\n         [1., 1., 1.,  ..., 1., 1., 1.],\n         [1., 1., ...",
+      "input_text": "Aromatic ring compound"
+    },
+    "image2image": {
+      "success": false,
+      "error": "Input height (299) doesn't match model (224).",
+      "generation_time": 0.00010561943054199219,
+      "input_scaffold": "tensor([[[1., 1., 1.,  ..., 1., 1., 1.],\n         [1., 1., 1.,  ..., 1., 1., 1.],\n         [1., 1., ...",
+      "input_text": "Aromatic ring compound"
+    }
+  }
+}
